@@ -1,0 +1,24 @@
+\usepackage{graphicx}
+\usepackage[stable]{footmisc}
+\usepackage{url}
+\usepackage{xcolor}
+
+\newcounter{excount}
+\setcounter{excount}{1}
+\newcommand{\exercisect}[1]{
+  \vspace{2em}\noindent
+  {\large\textbf{Exercise\ \arabic{excount}#1} \medskip}
+  \addtocounter{excount}{1}
+}
+\newcommand{\exerciset}[1]{\exercisect{: #1}}
+\newcommand{\exercise}{\exercisect{}}
+\newcommand{\opt}{
+  {\large\textbf{(Optional)}} 
+}
+
+\newenvironment{example}{\medskip \noindent \emph{Example}: }{}
+\newenvironment{rem}{\medskip \noindent \textbf{Remark.}}{}
+
+\graphicspath{{images/}}
+
+\newcommand{\todo}[1]{\noindent \textcolor{blue}{[\textbf{#1}]}}
