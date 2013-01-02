@@ -1,0 +1,14 @@
+*.o
+*.hi
+*~
+.shake.database
+Shake
+_cache
+_site
+*.exe
+*.aux
+*.log
+*.tex
+*.pdf
+web/hw/*
+web/lectures/*
