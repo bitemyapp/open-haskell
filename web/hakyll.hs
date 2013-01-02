@@ -7,9 +7,11 @@ main = hakyll $ do
   match "css/*" $ do
     route idRoute
     compile compressCssCompiler
-    
-  match "static/*" static
-  
+
+  match "static/**" static
+  match "hw/**" static
+  match "extras/**" static
+
   match "templates/*" $ compile templateCompiler
 
   match "header.markdown" $ compile pageCompiler
@@ -19,15 +21,15 @@ main = hakyll $ do
               , "resources.markdown"
               , "final.markdown"
               ]
-        ) 
+        )
     (defaultRules pageCompiler)
 
 --  match "lectures.markdown" $ defaultRules (pageCompiler >>> addLectures)
-    
+
   match "lectures/*" $ defaultRules (readPageCompiler >>> addDefaultFields)
-  
+
 static = route idRoute >> compile copyFileCompiler
-  
+
 defaultRules pc = do
   route $ setExtension "html"
   compile (pc >>>
