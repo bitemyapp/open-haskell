@@ -54,7 +54,7 @@ doPreview = action $ do
 
 doDeploy = action $ do
   alwaysRerun
-  liftIO $ system "rsync -tvr web/_site/* cis39903@minus.seas.upenn.edu:html/ && ssh cis39903@minus.seas.upenn.edu chmod -R o+rX html/"
+  liftIO $ system "rsync -tvr web/_site/* cis194@minus.seas.upenn.edu:html/ && ssh cis194@minus.seas.upenn.edu chmod -R o+rX html/"
 
 --------------------------------------------------
 

@@ -1,25 +1,26 @@
 ---
 title: CIS 194
 ---
-CIS 194: Introduction to Haskell (Spring 2012)
+CIS 194: Introduction to Haskell (Spring 2013)
 ==============================================
 
 <img src="/static/haskell-logo.png" style="float:right;" />
 
-Thursdays 10:30-12  
-Moore 212
+Mondays 1:30-3  
+Towne 309
 
-[Class Piazza site](http://piazza.com/upenn/spring2012/cis194)
+[Class Piazza site](http://piazza.com/upenn/spring2013/cis194)
  
 Instructor: [Brent Yorgey](http://www.cis.upenn.edu/~byorgey/)
 
 * Email: byorgey at cis
 * Office: Levine 513
-* Office hours: Tuesdays 12:30-3:30
+* Office hours: TBA
 
-TA: John Mayer
+TAs:
 
-* Email: jpmayer at seas
+* Adi Dahiya
+* Zach Wasserman
 
 Course Description
 ------------------
@@ -27,10 +28,10 @@ Course Description
 Haskell is a high-level, pure functional programming language with a
 strong static type system and elegant mathematical underpinnings, and
 is being increasingly used in industry by organizations such as
-Facebook, AT&T, and NASA.  In the first 2/3 of the course, we will
+Facebook, AT&T, and NASA.  In the first 3/4 of the course, we will
 explore the joys of pure, lazy, typed functional programming in
 Haskell (warning: euphoric, mind-bending epiphanies may result!).  The
-last 1/3 of the course will consist of case studies in fun and
+last 1/4 of the course will consist of case studies in fun and
 interesting applications of Haskell. Potential case study topics
 include automated randomized testing, software transactional memory,
 graphics generation, parser combinators, or others as time and

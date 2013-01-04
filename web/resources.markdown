@@ -6,7 +6,7 @@ Piazza
 ------
 
 * We will be using [Piazza](piazza.com) for announcements and as a place
-  for you to ask questions.  [Click here to enroll](http://piazza.com/upenn/spring2012/cis194).
+  for you to ask questions.  [Click here to enroll](http://piazza.com/upenn/spring2013/cis194).
 
 
 Installation and coding environment
