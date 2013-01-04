@@ -8,7 +8,7 @@
 
 \title{CIS 194: Homework 1}
 \date{}
-\author{Due Thursday, January 19}
+\author{Due Monday, January 14}
 \maketitle
 
 When solving the homework, strive to create not just code that works,

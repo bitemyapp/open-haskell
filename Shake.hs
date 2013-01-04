@@ -65,14 +65,14 @@ homeworkRules = do
         f    = weekFile base "" "markdown"
     copyFile' f out
 
+  "web/lectures/*.lhs" *> \out -> do
+    let base = takeBaseName out
+        f    = weekFile base "lec" "lhs"
+    copyFile' f out
+
   "web/hw/*.pdf" *> \out -> do
     let base = takeBaseName out
         f    = weekFile base "hw" "pdf"
-    copyFile' f out
-
-  "web/hw/*.lhs" *> \out -> do
-    let base = takeBaseName out
-        f    = weekFile base "hw" "lhs"
     copyFile' f out
 
 requireBuild :: Action ()
@@ -88,8 +88,8 @@ requireBuild = do
       [ weekFile week "sols" "pdf" | solsExist ]
       ++
       [ "web/lectures" </> week <.> "markdown"
+      , "web/lectures" </> week <.> "lhs"
       , "web/hw" </> week <.> "pdf"
-      , "web/hw" </> week <.> "lhs"
       ]
 
 weekFile :: FilePath -> String -> String -> FilePath

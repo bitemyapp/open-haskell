@@ -1,6 +1,7 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-import Control.Arrow ((>>>))
+import Control.Arrow ((>>>), (>>^), arr)
+import Data.List     (intercalate)
 import Hakyll
 
 main = hakyll $ do
@@ -11,22 +12,23 @@ main = hakyll $ do
   match "static/**" static
   match "hw/**" static
   match "extras/**" static
+  match "lectures/*.lhs" static
 
   match "templates/*" $ compile templateCompiler
 
   match "header.markdown" $ compile pageCompiler
 
   match (list [ "index.markdown"
-              , "lectures.markdown"
               , "resources.markdown"
               , "final.markdown"
               ]
         )
     (defaultRules pageCompiler)
 
---  match "lectures.markdown" $ defaultRules (pageCompiler >>> addLectures)
+  match "lectures/*.markdown" $ defaultRules pageCompiler
 
-  match "lectures/*" $ defaultRules (readPageCompiler >>> addDefaultFields)
+  match "lectures.markdown" $ defaultRules (pageCompiler >>> addLectures)
+
 
 static = route idRoute >> compile copyFileCompiler
 
@@ -38,12 +40,25 @@ defaultRules pc = do
            relativizeUrlsCompiler
           )
 
-{-
 addLectures :: Compiler (Page String) (Page String)
-addLectures =
-  setFieldPageList id
-    "templates/lecture.html"
-    "projects"
-    "projects/*"
-  >>> arr (\p -> fmap (++ getField "projects" p) p)
--}
+addLectures = compileLectures
+  >>> arr (\p -> fmap (++ getField "lectures" p) p)
+
+compileLectures =
+  requireAllA "lectures/*.markdown" $
+  setFieldA "lectures" $
+  arr (map compileSources) >>>
+  pageListCompiler id "templates/lecture.markdown" >>^
+  (readPandoc Markdown Nothing >>> writePandoc)
+
+compileSources :: Page String -> Page String
+compileSources p = setField "sources" sources p
+  where
+    name    = getField "name" p
+    sources = tex ++ extra
+    tex     = "[tex](static/" ++ name ++ ".tex)"
+    extra   =
+      case getFieldMaybe "extra" p of
+        Nothing -> ""
+        Just es -> (", " ++) . intercalate ", " . map linkify . words $ es
+    linkify e = "[" ++ e ++ "](static/" ++ name ++ "/" ++ e ++ ")"
