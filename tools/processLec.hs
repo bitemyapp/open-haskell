@@ -1,7 +1,7 @@
 {-# LANGUAGE DeriveDataTypeable #-}
 
--- CIS 194, F'10, S'12.
--- Utility to prepare in-class versions of .lhs files:
+-- CIS 194, F'10, S'12, S'13.
+-- Utility to prepare in-class versions and HTML versions of .lhs files:
 --   + strip HTML comments
 --   + consecutively number examples
 --   + add compile date+time
@@ -17,7 +17,7 @@ import Data.Time
 
 import Data.Maybe
 import Control.Applicative ((<$>))
-import Supply
+import Control.Monad.Supply
 
 import Data.Char
 

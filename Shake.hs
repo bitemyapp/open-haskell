@@ -70,6 +70,13 @@ homeworkRules = do
         f    = weekFile base "lec" "lhs"
     copyFile' f out
 
+  "web/lectures/*.html" *> \out -> do
+    let base = takeBaseName out
+        f    = weekFile base "lec" "lhs"
+    need [f, "tools/processLec.hs.exe"]
+    system' "tools/processLec.hs.exe"
+      [ "html", '<' : f, '>' : out ]
+
   "web/hw/*.pdf" *> \out -> do
     let base = takeBaseName out
         f    = weekFile base "hw" "pdf"
@@ -89,6 +96,7 @@ requireBuild = do
       ++
       [ "web/lectures" </> week <.> "markdown"
       , "web/lectures" </> week <.> "lhs"
+      , "web/lectures" </> week <.> "html"
       , "web/hw" </> week <.> "pdf"
       ]
 
