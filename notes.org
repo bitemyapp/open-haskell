@@ -1,0 +1,23 @@
+* Meeting with TAs, 10 Jan 2013
+
+  Agenda:
+
+  + grading/submission system
+
+    - private repos on github?
+    - for grading, send email with link to commit to be graded
+
+  + github learning session?  
+
+  + how to handle grading responsibilities?
+    - alternate weeks? -- that way each week grading new or revised
+    - collaborate each week?
+
+    - due Monday.  Graded by Wednesday (or Thursday at the latest)?
+    - revisions also due Monday.
+    - revisions graded in a timely manner too.
+    - solutions released 1 week after due.
+
+  + How can I support you in fulfilling your responsibilities?
+
+  + keep grades in Google Doc spreadsheet
