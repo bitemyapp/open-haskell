@@ -6,7 +6,7 @@ Haskell Basics
 ==============
 
 CIS 194 Week 1  
-12 January 2012
+14 January 2013
 
 Suggested reading:
 
@@ -121,7 +121,8 @@ close look at Haskell's type system, which
 
     The first step in writing a Haskell program is usually to *write
     down all the types*.  Because Haskell's type system is so expressive,
-    this is a non-trivial design step and 
+    this is a non-trivial design step and is an immense help in
+    clarifying one's thinking about the program.
 
 * *Serves as a form of documentation*
 
@@ -144,7 +145,7 @@ programming.  Also known as the "Abstraction Principle", the idea is
 that nothing should be duplicated: every idea, algorithm, and piece of
 data should occur exactly once in your code.  Taking similar pieces of
 code and factoring out their commonality is known as the process of
-*abstraction*
+*abstraction*.
 
 Haskell is very good at abstraction: features like parametric
 polymorphism, higher-order functions, and type classes all aid in the
@@ -272,8 +273,9 @@ For floating-point numbers, there is `Double`:
 > d1 = 4.5387
 > d2 = 6.2831e-4
 
-There is also a single-precision floating point number type, `Float`,
-but it is not used much.
+There is also a single-precision floating point number type, `Float`.
+
+Finally, there are booleans, characters, and strings:
 
 > -- Booleans
 > b1, b2 :: Bool
@@ -297,10 +299,7 @@ GHCi is an interactive Haskell REPL (Read-Eval-Print-Loop) that comes
 with GHC. At the GHCi prompt, you can evaluate expressions, load
 Haskell files with `:load` (`:l`) (and reload them with `:reload`
 (`:r`)), ask for the type of an expression with `:type` (`:t`), and
-many other things (try `:?` for a list of commands).  Unfortunately,
-you cannot yet write declarations at the GHCi prompt, only expressions
-to be evaluated (however, an upcoming version of GHCi will allow
-declarations).
+many other things (try `:?` for a list of commands).
 
 Arithmetic
 ----------
@@ -471,20 +470,27 @@ Haskell also has triples, quadruples, ... but you should never use
 them. As we'll see next week, there are much better ways to package
 three or more pieces of information together.
 
-Using functions
----------------
+Using functions, and multiple arguments
+---------------------------------------
 
 To apply a function to some arguments, just list the arguments after
 the function, separated by spaces, like this:
 
+> f :: Int -> Int -> Int -> Int
 > f x y z = x + y + z
 > exFF = f 3 17 8
 
 The above example applies the function `f` to the three arguments `3`,
-`17`, and `8`.
+`17`, and `8`.  Note also the syntax for the type of a function with
+multiple arguments, like `Arg1Type -> Arg2Type -> ... -> ResultType`.
+This might seem strange to you (and it should!).  Why all the arrows?
+Wouldn't it make more sense for the type of `f` to be something like
+`Int Int Int -> Int`?  Actually, the syntax is no accident: it is the
+way it is for a very deep and beautiful reason, which we'll learn
+about in a few weeks; for now you just have to take my word for it!
 
-Note that function application has higher precedence than any infix
-operators!  So it would be incorrect to write
+Note that **function application has higher precedence than any infix
+operators**.  So it would be incorrect to write
 
 `f 3 n+1 7`
 
@@ -653,6 +659,3 @@ away; take a deep breath; and read it carefully.  You won't
 necessarily understand the entire thing, but you will probably learn a
 lot, and you may just get enough information to figure out what the
 problem is.
-
-
-XXX where to talk about function types with multiple arguments?  Used on the homework but not in any examples above.
