@@ -9,10 +9,13 @@ main = hakyll $ do
     route idRoute
     compile compressCssCompiler
 
-  match "static/**" static
-  match "hw/**" static
-  match "extras/**" static
-  match "lectures/*.lhs" static
+  matchAny [ "docs/**"
+           , "static/**"
+           , "hw/**"
+           , "extras/**"
+           , "lectures/*.lhs"
+           ]
+    static
 
   match "templates/*" $ compile templateCompiler
 
@@ -25,10 +28,15 @@ main = hakyll $ do
         )
     (defaultRules pageCompiler)
 
-  match "lectures/*.markdown" $ defaultRules pageCompiler
+  match "lectures/*.html" $
+    defaultRules (readPageCompiler >>> addDefaultFields)
 
-  match "lectures.markdown" $ defaultRules (pageCompiler >>> addLectures)
+  match "lectures/*.markdown" $ compile readPageCompiler
 
+  match "lectures.markdown" $
+    defaultRules (pageCompiler >>> addLectures)
+
+matchAny pats rules = mapM_ (flip match rules) pats
 
 static = route idRoute >> compile copyFileCompiler
 

@@ -38,7 +38,7 @@ chooseMode mode = cis194Rules <> choose mode
     choose (Deploy {})  = doDeploy
 
 cis194Rules :: Rules ()
-cis194Rules = genericRules <> homeworkRules
+cis194Rules = genericRules <> webRules
 
 doBuild = action $ requireBuild
 
@@ -58,8 +58,8 @@ doDeploy = action $ do
 
 --------------------------------------------------
 
-homeworkRules :: Rules ()
-homeworkRules = do
+webRules :: Rules ()
+webRules = do
   "web/lectures/*.markdown" *> \out -> do
     let base = takeBaseName out
         f    = weekFile base "" "markdown"
@@ -75,17 +75,21 @@ homeworkRules = do
         f    = weekFile base "lec" "lhs"
     need [f, "tools/processLec.hs.exe"]
     system' "tools/processLec.hs.exe"
-      [ "html", '<' : f, '>' : out ]
+      [ "html",  f, "-o", out ]
 
   "web/hw/*.pdf" *> \out -> do
     let base = takeBaseName out
         f    = weekFile base "hw" "pdf"
     copyFile' f out
 
+  "web/docs/*" *> \out -> do
+    copyFile' (dropDirectory1 out) out
+
 requireBuild :: Action ()
 requireBuild = do
   weekDirs <- getDirectoryDirs "weeks"
   need =<< (concat <$> mapM mkWeek weekDirs)
+  need ["web/docs/inthelarge.pdf", "web/docs/style.pdf"]
  where
   mkWeek week = do
     solsExist <- doesFileExist (weekFile week "sols" "lhs")
@@ -113,7 +117,7 @@ genericRules = do
     need [hs]
     system' "ghc" ["--make", "-o", out, hs]
 
-  "weeks//*.pdf" *> \out -> do
+  ["docs//*.pdf", "weeks//*.pdf"] **> \out -> do
     let tex = replaceExtension out "tex"
         dir = takeDirectory out
     need [tex]
