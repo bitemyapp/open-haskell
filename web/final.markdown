@@ -19,7 +19,7 @@ Resources
 ---------
 
 Here is a document explaining a few things relevant to
-[Haskell programming in the large](/static/inthelarge.pdf).
+[Haskell programming in the large](/docs/inthelarge.pdf).
 
 Format
 ------
