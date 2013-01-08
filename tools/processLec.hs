@@ -25,7 +25,9 @@ import Data.Char
 -- Command-line arguments.
 ------------------------------------------------------------
 
-data Target = Class | Html | Slides
+data Target = Class { inputFile :: FilePath, outputFile :: Maybe FilePath }
+            | Html  { inputFile :: FilePath, outputFile :: Maybe FilePath }
+            | Slides
   deriving (Show, Data, Typeable, Eq)
 
 ------------------------------------------------------------
@@ -132,15 +134,37 @@ writeHTML = writeHtmlString defaultWriterOptions { writerLiterateHaskell = True 
 
 main :: IO ()
 main = do
-  targ    <- cmdArgs (modes [ Class  &= help "Output in-class .lhs"
-                            , Html   &= help "Output .html"
-                            , Slides &= help "Output slides"
-                            ])
+  opts    <- cmdArgs (modes [ Class
+                              { inputFile = def
+                                         &= argPos 0
+                                         &= typFile
+                              , outputFile = def
+                                         &= typFile
+                                         &= help "Output file"
+                              }
+                              &= help "Output in-class .lhs"
+                            , Html
+                              { inputFile = def
+                                         &= argPos 0
+                                         &= typFile
+                              , outputFile = def
+                                         &= typFile
+                                         &= help "Output file"
+                              }
+                              &= help "Output .html"
+                            ]
+                            &= summary "Process CIS 194 lecture notes"
+                            &= program "processLec"
+                            )
   utcTime <- getCurrentTime
   tz      <- getCurrentTimeZone
   let time = show $ utcToLocalTime tz utcTime
-  interact (chooseTransform time targ)
+  f <- readFile (inputFile opts)
+  let output = chooseTransform time opts f
+  case outputFile opts of
+    Nothing -> putStr output
+    Just o  -> writeFile o output
 
-chooseTransform time Class  = writeLHS  . transformDoc Class time . readLHS
-chooseTransform time Html   = writeHTML . transformDoc Html  time . readLHS
-chooseTransform _    Slides = writeSlides . genSlides . readLHS
+chooseTransform time t@(Class{})  = writeLHS  . transformDoc t time . readLHS
+chooseTransform time t@(Html{})   = writeHTML . transformDoc t time . readLHS
+-- chooseTransform _    Slides = writeSlides . genSlides . readLHS
