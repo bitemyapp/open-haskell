@@ -24,13 +24,13 @@ was hard to communicate ideas.  So a bunch of people got together and
 designed a new language, taking some of the best ideas from existing
 languages (and a few new ideas of their own).  Haskell was born.
 
-<img src="/static/haskell-logo.png" />
+<img src="/images/haskell-logo-small.png" />
 
 So what is Haskell like?  Haskell is:
 
 **Functional**
 
-<img src="/static/function-machine.png" width="200px" />
+<img src="/images/function-machine.png" width="200px" />
 
 There is no precise, accepted meaning for the term "functional".
 But when we say that Haskell is a *functional* language, we usually
@@ -48,7 +48,7 @@ this way of thinking.
 
 **Pure** 
 
-<img src="/static/pure.jpg" width="200px" />
+<img src="/images/pure.jpg" width="200px" />
 
 Haskell expressions are always *referentially transparent*, that is:
 
@@ -78,7 +78,7 @@ a number of wonderful benefits:
 
 **Lazy**
 
-<img src="/static/relax.jpg" width="200px" />
+<img src="/images/relax.jpg" width="200px" />
 
 In Haskell, expressions are *not evaluated until their results are
 actually needed*.  This is a simple decision with far-reaching
@@ -98,7 +98,7 @@ the consequences include:
 
 **Statically typed**
 
-<img src="/static/static.jpg" width="200px" />
+<img src="/images/static.jpg" width="200px" />
 
 Every Haskell expression has a type, and types are all checked at
 *compile-time*.  Programs with type errors will not even compile, much
