@@ -2,9 +2,17 @@
 
 import Control.Arrow ((>>>), (>>^), arr)
 import Data.List     (intercalate)
+import Data.Time
+import System.Locale (defaultTimeLocale)
+
+import Debug.Trace
+
 import Hakyll
 
-main = hakyll $ do
+main = do
+  today <- getCurrentDate
+
+  hakyll $ do
   match "css/*" $ do
     route idRoute
     compile compressCssCompiler
@@ -34,7 +42,7 @@ main = hakyll $ do
   match "lectures/*.markdown" $ compile readPageCompiler
 
   match "lectures.markdown" $
-    defaultRules (pageCompiler >>> addLectures)
+    defaultRules (pageCompiler >>> addLectures today)
 
 matchAny pats rules = mapM_ (flip match rules) pats
 
@@ -48,16 +56,28 @@ defaultRules pc = do
            relativizeUrlsCompiler
           )
 
-addLectures :: Compiler (Page String) (Page String)
-addLectures = compileLectures
+addLectures :: (Integer,Int,Int) -> Compiler (Page String) (Page String)
+addLectures today = compileLectures today
   >>> arr (\p -> fmap (++ getField "lectures" p) p)
 
-compileLectures =
+compileLectures :: (Integer,Int,Int) -> Compiler (Page String) (Page String)
+compileLectures today =
   requireAllA "lectures/*.markdown" $
   setFieldA "lectures" $
-  arr (map compileSources) >>>
+  arr (filter (const True) {- (before today) -} >>> map compileSources) >>>
   pageListCompiler id "templates/lecture.markdown" >>^
   (readPandoc Markdown Nothing >>> writePandoc)
+
+before :: (Integer,Int,Int) -> Page String -> Bool
+before (y,m,d) page =
+  case getFieldMaybe "date" page of
+    Nothing -> False
+    Just dt ->
+      case readsTime defaultTimeLocale "%e %B %Y" (dt ++ " " ++ show y) of
+        [(day, _)] ->
+          let (_,m',d') = toGregorian day
+          in  traceShow (m',d') $ (m',d') <= (m,d)
+        _ -> False
 
 compileSources :: Page String -> Page String
 compileSources p = setField "sources" sources p
@@ -70,3 +90,12 @@ compileSources p = setField "sources" sources p
         Nothing -> ""
         Just es -> (", " ++) . intercalate ", " . map linkify . words $ es
     linkify e = "[" ++ e ++ "](static/" ++ name ++ "/" ++ e ++ ")"
+
+getCurrentDate :: IO (Integer,Int,Int)
+getCurrentDate = do
+  nowUTC <- getCurrentTime
+  tz     <- getCurrentTimeZone
+  let mins    = timeZoneMinutes tz * 60
+      now     = addUTCTime (fromIntegral mins) nowUTC
+      today   = toGregorian . utctDay $ now
+  return today
