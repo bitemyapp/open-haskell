@@ -12,3 +12,4 @@ _site
 *.pdf
 web/hw/*
 web/lectures/*
+web/images/*

@@ -10,7 +10,7 @@ main = hakyll $ do
     compile compressCssCompiler
 
   matchAny [ "docs/**"
-           , "static/**"
+           , "images/**"
            , "hw/**"
            , "extras/**"
            , "lectures/*.lhs"

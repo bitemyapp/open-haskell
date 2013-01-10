@@ -88,9 +88,14 @@ webRules = do
 requireBuild :: Action ()
 requireBuild = do
   weekDirs <- getDirectoryDirs "weeks"
+  mapM_ copyImages weekDirs
   need =<< (concat <$> mapM mkWeek weekDirs)
   need ["web/docs/inthelarge.pdf", "web/docs/style.pdf"]
  where
+  copyImages week = do
+    let imgDir = "weeks" </> week </> "images"
+    imgFiles <- getDirectoryFiles imgDir "*"
+    mapM_ (\f -> copyFile' (imgDir </> f) ("web/images" </> f)) imgFiles
   mkWeek week = do
     solsExist <- doesFileExist (weekFile week "sols" "lhs")
     return $
