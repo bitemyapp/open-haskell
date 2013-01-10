@@ -9,6 +9,7 @@ import Development.Shake.FilePath
 
 import System.Cmd             ( system )
 import System.Console.CmdArgs
+import System.Directory       ( doesDirectoryExist )
 
 makeDir = ".make"
 
@@ -94,8 +95,10 @@ requireBuild = do
  where
   copyImages week = do
     let imgDir = "weeks" </> week </> "images"
-    imgFiles <- getDirectoryFiles imgDir "*"
-    mapM_ (\f -> copyFile' (imgDir </> f) ("web/images" </> f)) imgFiles
+    exists <- doesFileExist imgDir
+    when exists $ do
+      imgFiles <- getDirectoryFiles imgDir "*"
+      mapM_ (\f -> copyFile' (imgDir </> f) ("web/images" </> f)) imgFiles
   mkWeek week = do
     solsExist <- doesFileExist (weekFile week "sols" "lhs")
     return $
