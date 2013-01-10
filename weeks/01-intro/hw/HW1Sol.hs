@@ -44,7 +44,7 @@ mySum :: [Integer] -> Integer
 mySum []     = 0
 mySum (x:xs) = x + mySum xs
 
--- Alternate approach that seperates the flattening of the digit list.
+-- Alternate approach that separates the flattening of the digit list.
 sumDigits2 n = mySum (explode n)
 
 explode :: [Integer] -> [Integer]
