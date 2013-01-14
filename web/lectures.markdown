@@ -3,6 +3,6 @@ title: Lecture notes and assignments
 ---
 
 All homework assignments should emerge creatively from the [Style
-guidelines](docs/style.pdf).  To submit your homework assignment,
-XXX TBA.
+guidelines](docs/style.pdf).  Instructions on submitting your
+assignment will be coming shortly.
 
