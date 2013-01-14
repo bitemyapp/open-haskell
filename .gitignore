@@ -10,6 +10,8 @@ _site
 *.log
 *.tex
 *.pdf
+*.out
 web/hw/*
 web/lectures/*
 web/images/*
+*diagrams-latex-fig*
