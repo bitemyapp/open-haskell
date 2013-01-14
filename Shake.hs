@@ -1,7 +1,8 @@
 {-# LANGUAGE DeriveDataTypeable #-}
 
-import Control.Monad          ( replicateM_, when )
+import Control.Monad          ( replicateM_, forM_, when )
 import Data.Functor           ( (<$>) )
+import Data.List              ( isPrefixOf )
 import Data.Monoid            ( (<>) )
 
 import Development.Shake
@@ -10,8 +11,6 @@ import Development.Shake.FilePath
 import System.Cmd             ( system )
 import System.Console.CmdArgs
 import System.Directory       ( doesDirectoryExist )
-
-makeDir = ".make"
 
 data CIS194Mode =
     Build
@@ -129,6 +128,14 @@ genericRules = do
     let tex = replaceExtension out "tex"
         dir = takeDirectory out
     need [tex]
+    pkgs <- ( map (takeWhile (/= '}') . drop 1 . dropWhile (/= '{'))
+            . filter ("\\usepackage" `isPrefixOf`)
+            )
+            <$> readFileLines tex
+    forM_ pkgs $ \pkg -> do
+      let sty = dir </> pkg <.> "sty"
+      e <- doesFileExist sty
+      when e $ need [sty]
     hs <- getDirectoryFiles dir "*.hs"
     need (map (dir </>) hs)
 
