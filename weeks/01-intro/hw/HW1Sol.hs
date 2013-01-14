@@ -25,13 +25,17 @@ toDigits' = reverse . toDigitsRev
 -- Exercise 2 -----------------------------------------
 
 -- Double every second number in a list starting on the left.
-doubleEveryOther :: [Integer] -> [Integer]
-doubleEveryOther []      = []
-doubleEveryOther [x]     = [x]
-doubleEveryOther (x:y:z) = x : 2*y : doubleEveryOther z
+doubleEveryOtherL :: [Integer] -> [Integer]
+doubleEveryOtherL []      = []
+doubleEveryOtherL [x]     = [x]
+doubleEveryOtherL (x:y:z) = x : 2*y : doubleEveryOther z
 
 -- Alternate version using zipWith.
-doubleEveryOther' = zipWith (*) (cycle [1,2])
+doubleEveryOtherL' = zipWith (*) (cycle [1,2])
+
+-- Double every second number in a list starting on the right.
+doubleEveryOther :: [Integer] -> [Integer]
+doubleEveryOther ds = reverse (doubleEveryOtherL (reverse ds))
 
 -- Exercise 3 -----------------------------------------
 
