@@ -5,8 +5,6 @@ import Data.List     (intercalate)
 import Data.Time
 import System.Locale (defaultTimeLocale)
 
-import Debug.Trace
-
 import Hakyll
 
 main = do
@@ -64,7 +62,7 @@ compileLectures :: (Integer,Int,Int) -> Compiler (Page String) (Page String)
 compileLectures today =
   requireAllA "lectures/*.markdown" $
   setFieldA "lectures" $
-  arr (filter (const True) {- (before today) -} >>> map compileSources) >>>
+  arr (filter (before today) >>> map compileSources) >>>
   pageListCompiler id "templates/lecture.markdown" >>^
   (readPandoc Markdown Nothing >>> writePandoc)
 
@@ -76,7 +74,7 @@ before (y,m,d) page =
       case readsTime defaultTimeLocale "%e %B %Y" (dt ++ " " ++ show y) of
         [(day, _)] ->
           let (_,m',d') = toGregorian day
-          in  traceShow (m',d') $ (m',d') <= (m,d)
+          in  (m',d') <= (m,d)
         _ -> False
 
 compileSources :: Page String -> Page String
