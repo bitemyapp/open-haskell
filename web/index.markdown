@@ -4,7 +4,7 @@ title: CIS 194
 CIS 194: Introduction to Haskell (Spring 2013)
 ==============================================
 
-<img src="/static/haskell-logo.png" style="float:right;" />
+<img src="/images/haskell-logo-small.png" style="float:right;" />
 
 Mondays 1:30-3  
 Towne 309
