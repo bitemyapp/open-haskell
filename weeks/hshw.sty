@@ -2,6 +2,9 @@
 \usepackage[stable]{footmisc}
 \usepackage{url}
 \usepackage{xcolor}
+\usepackage{diagrams-latex}
+\usepackage{prettyref}
+\usepackage{todonotes}
 
 \newcounter{excount}
 \setcounter{excount}{1}
@@ -21,4 +24,34 @@
 
 \graphicspath{{images/}}
 
-\newcommand{\todo}[1]{\noindent \textcolor{blue}{[\textbf{#1}]}}
+\newrefformat{fig}{Figure~\ref{#1}}
+\newrefformat{sec}{section~\ref{#1}}
+\newrefformat{eq}{equation~\eqref{#1}}
+\newrefformat{prob}{Problem~\ref{#1}}
+\newrefformat{tab}{Table~\ref{#1}}
+\newrefformat{thm}{Theorem~\ref{#1}}
+\newrefformat{lem}{Lemma~\ref{#1}}
+\newrefformat{prop}{Proposition~\ref{#1}}
+\newrefformat{defn}{Definition~\ref{#1}}
+\newrefformat{cor}{Corollary~\ref{#1}}
+\newcommand{\pref}[1]{\prettyref{#1}}
+
+% \Pref is just like \pref but it uppercases the first letter; for use
+% at the beginning of a sentence.
+\newcommand{\Pref}[1]{%
+  \expandafter\ifx\csname r@#1\endcsname\relax {\scriptsize[ref]}
+    \else
+    \edef\reftext{\prettyref{#1}}\expandafter\MakeUppercase\reftext
+    \fi
+}
+
+\newcommand{\term}[1]{\emph{#1}}
+\newcommand{\ie}{\emph{i.e.}}
+\newcommand{\etc}{\emph{etc.}}
+
+\let\oldtodo\todo
+\renewcommand{\todo}[1]{\oldtodo[inline,size=\small]{#1}}
+
+\let\oldmaketitle\maketitle
+\renewcommand{\maketitle}{\oldmaketitle\smallskip\hrule\bigskip}
+
