@@ -1,14 +1,15 @@
 % -*- LaTeX -*-
-\documentclass{article}
+\documentclass{tufte-handout}
 %include lhs2TeX.fmt
+
+\title{CIS 194: Homework 1}
+\date{}
+\author{Due Monday, January 14}
 
 \usepackage{../hshw}
 
 \begin{document}
 
-\title{CIS 194: Homework 1}
-\date{}
-\author{Due Monday, January 14}
 \maketitle
 
 When solving the homework, strive to create not just code that works,
@@ -134,13 +135,62 @@ number. This will use all functions defined in the previous exercises.
 \end{center}
 
 \exercise
-The \emph{towers of Hanoi} is a simple recursive game. (You've
-probably seen it before; if it is not familiar, you may want to read a
-little about it on the web to get some intuition.) The purpose is to
-move a stack of $n$ discs from one peg to another, using a third peg
-as ``temporary'' storage and respecting the constraint that no disc is
-ever placed on top of a smaller one. To move $n$ discs (stacked in
-increasing size) from peg $a$ to peg $b$ using peg $c$ as temporary storage,
+The \term{Towers of Hanoi} is a classic puzzle with a solution that
+can be described recursively.  Disks of different sizes are stacked on
+three pegs; the goal is to get from a starting configuration with all
+disks stacked on the first peg to an ending configuration with all
+disks stacked on the last peg, as shown in \pref{fig:hanoi}.
+\begin{marginfigure}[-8em]
+\begin{center}
+\begin{diagram}[width=150]
+import Hanoi
+dia = renderHanoi [[0..4], [], []] # pad 1.1
+\end{diagram}
+
+\vspace{1em}
+{\LARGE $\Downarrow$}
+\vspace{0.5em}
+
+\begin{diagram}[width=150]
+import Hanoi 
+dia = renderHanoi [[], [], [0..4]] # pad 1.1
+\end{diagram}
+\end{center}
+\caption{The Towers of Hanoi} \label{fig:hanoi}
+\end{marginfigure}
+
+The only rules are
+\begin{itemize}
+\item you may only move one disk at a time, and
+\item a larger disk may never be stacked on top of a smaller one.
+\end{itemize}
+For example, as the first move all you can do is move the topmost,
+smallest disk onto a different peg, since only one disk may be moved
+at a time.
+\begin{marginfigure}[-5em]
+  \begin{center}
+  \begin{diagram}[width=150]
+import Hanoi 
+dia = renderHanoi [[1..4], [0], []] # pad 1.1
+  \end{diagram}
+  \end{center}
+  \caption{A valid first move.}
+\end{marginfigure}
+From this point, it is \emph{illegal} to move to the configuration
+shown in \pref{fig:illegal}, because you are not allowed to put the
+green disk on top of the smaller blue one.
+\begin{marginfigure}[-3em]
+  \begin{center}
+  \begin{diagram}[width=150]
+import Hanoi
+dia = renderHanoi [[2..4], [1,0], []] # pad 1.1
+  \end{diagram}
+  \end{center}
+\caption{An illegal configuration.} \label{fig:illegal}
+\end{marginfigure}
+
+To move $n$ discs (stacked in increasing size) from peg $a$ to peg $b$
+using peg $c$ as temporary storage,
 \begin{enumerate}
   \item move $n - 1$ discs from $a$ to $c$ using $b$ as temporary storage
   \item move the top disc from $a$ to $b$
@@ -167,7 +217,6 @@ simply to help with documentation.
   |hanoi 2 "a" "b" "c" == [("a","c"), ("a","b"), ("c","b")]|  
 \end{example}
 
-\newpage
 \exercise \opt What if there are four pegs instead of three?  That is,
 the goal is still to move a stack of discs from the first peg to the
 last peg, without ever placing a larger disc on top of a smaller one,
@@ -180,4 +229,159 @@ pegs.  For example, with three pegs it takes $2^{15} - 1 = 32767$
 moves to transfer $15$ discs.  With four pegs it can be done in $129$
 moves. (See Exercise 1.17 in Graham, Knuth, and Patashnik,
 \emph{Concrete Mathematics}, second ed., Addison-Wesley, 1994.)
+\end{document}
+
+
+\documentclass{tufte-handout}
+
+\usepackage{../taor}
+
+\title{The Art of Recursion: Problem Set 1}
+\date{Due Tuesday, 11 September 2012}
+
+\begin{document}
+
+\taortitle
+
+Consider the following recursive definition of the \emph{factorial}
+function on natural numbers:
+\begin{align*}
+  \fact(0) &= 1 \\
+  \fact(n) &= n \cdot \fact(n-1) \quad (n > 0)
+\end{align*}
+It is common to use the notation $n!$ as an abbreviation for
+$\fact(n)$.
+
+\begin{enumerate}
+
+\item Implement the above definition directly as a recursive function,
+  using any programming language you like.\footnote{You probably
+    want to use a ``big integer'' type that allows unlimited-size
+    integers, if such a type is available.}
+
+\item What is the big-$O$ time complexity of computing $\fact(n)$ using
+  this definition?\footnote{You may pretend that multiplication is
+    $O(1)$, though with arbitrarily-sized integers this is an outright
+    lie.} Empirically, how large can you make $n$ and still
+  reasonably compute $\fact(n)$ with your implementation?
+
+\item Prove by induction that given any natural number $n$ as input,
+  evaluation of $\fact(n)$ will finish after a finite amount of time
+  (that is, $\fact(n)$ \term{terminates} for all inputs).
+
+\item Write down a recursively defined function on the natural numbers
+  which does not terminate for some (or all) inputs.  What goes wrong
+  if you try to prove that it always terminates using induction?
+
+\item Prove that $n! \geq 2^n$ for all $n \geq 4$.
+
+\item What goes wrong if you try using induction to prove $n! \geq
+  2^n$ for all $n \geq 0$?
+\item What goes wrong if you try using induction to prove $n! \geq
+  2^n$ for all $n \geq 2$?
+
+\item Prove by induction: for all $n \geq 0$, \[ \sum_{k = 0}^n k
+  \cdot (k!) = 0 \cdot 0! + 1 \cdot 1! + 2 \cdot 2! + \dots + n \cdot n! = (n+1)! -
+  1. \]
+
+\item Consider the following infinite sequence of positive integers,
+  with the first ten terms shown: \[ 0, 1, 3, 6, 10, 15, 21, 28, 36,
+  45, \dots \]
+  \begin{itemize}
+  \item Write down a recursive definition of this sequence.
+  \item Derive a (non-recursive) formula for computing the $n$th term
+    of the sequence, and prove that it gives the same
+    results as your recursive definition from part (a).
+  \end{itemize}
+
+\item Write down a recursive definition for the following sequence: \[
+  0,1,3,13,183,33673,1133904603,1285739649838492213 \dots \]
+
+\end{enumerate} \bigskip
+
+The \term{Towers of Hanoi} is a classic puzzle with a solution that
+can be described recursively.  Disks of different sizes are stacked on
+three pegs; the goal is to get from a starting configuration with all
+disks stacked on the first peg to an ending configuration with all
+disks stacked on the last peg, as shown in \pref{fig:hanoi}.
+\begin{marginfigure}[-8em]
+\begin{center}
+\begin{diagram}[width=150]
+import Hanoi
+dia = renderHanoi [[0..4], [], []] # pad 1.1
+\end{diagram}
+
+\vspace{1em}
+{\LARGE $\Downarrow$}
+\vspace{0.5em}
+
+\begin{diagram}[width=150]
+import Hanoi 
+dia = renderHanoi [[], [], [0..4]] # pad 1.1
+\end{diagram}
+\end{center}
+\caption{The Towers of Hanoi} \label{fig:hanoi}
+\end{marginfigure}
+
+The only rules are
+\begin{itemize}
+\item you may only move one disk at a time, and
+\item a larger disk may never be stacked on top of a smaller one.
+\end{itemize}
+For example, as the first move all you can do is move the topmost,
+smallest disk onto a different peg, since only one disk may be moved
+at a time.
+\begin{marginfigure}[-5em]
+  \begin{center}
+  \begin{diagram}[width=150]
+import Hanoi 
+dia = renderHanoi [[1..4], [0], []] # pad 1.1
+  \end{diagram}
+  \end{center}
+  \caption{A valid first move.}
+\end{marginfigure}
+From this point, it is \emph{illegal} to move to the configuration
+shown in \pref{fig:illegal}, because you are not allowed to put the
+green disk on top of the smaller blue one.
+\begin{marginfigure}[-3em]
+  \begin{center}
+  \begin{diagram}[width=150]
+import Hanoi
+dia = renderHanoi [[2..4], [1,0], []] # pad 1.1
+  \end{diagram}
+  \end{center}
+\caption{An illegal configuration.} \label{fig:illegal}
+\end{marginfigure}
+
+\begin{enumerate}[resume]
+\item Describe a recursive procedure for solving the puzzle.
+\item How many steps does your procedure take to solve the puzzle with
+  $n$ disks?  Prove your answer by induction.
+
+\item \pref{fig:chords} shows several circles, cut by chords into one,
+  two, four, and six regions, respectively.
+  \begin{figure*}
+    \centering
+  \begin{diagram}[width=400]
+import Chords
+d0 = c
+d1 = c <> ch 0.5 (1/7)
+d2 = c <> ch 0.5 (-1/9) <> ch 0.3 (1/20)
+d3 = c <> ch 0 (1/4 + 1/41) <> ch 0.7 (1/2 + 1/19) <> ch 0.1 (1/7)
+dia = hcat' with {sep = 0.5} [d0, d1, d2, d3]
+    # centerX # pad 1.1 # lw 0.02
+  \end{diagram}    
+    \caption{Circles cut by zero, one, two, and three chords.}
+    \label{fig:chords}
+  \end{figure*} 
+
+The pictures with zero, one, and two chords show the maximum
+  possible number of regions (one, two, and four, respectively) which
+  can be created with that many chords.  However, using three chords it
+  is possible to create more regions than shown.  
+
+  In general, what is the maximum number of regions that can be created 
+  using $n$ chords?  Prove your answer.
+\end{enumerate}
+
 \end{document}
