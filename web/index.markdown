@@ -15,7 +15,7 @@ Instructor: [Brent Yorgey](http://www.cis.upenn.edu/~byorgey/)
 
 * Email: byorgey at cis
 * Office: Levine 513
-* Office hours: TBA
+* Office hours: Friday 2-4pm
 
 TAs:
 
