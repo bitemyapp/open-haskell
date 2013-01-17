@@ -3,7 +3,7 @@ Algebraic data types
 ====================
 
 CIS 194 Week 2  
-19 January 2012
+21 January 2013
 
 Suggested reading:
 
