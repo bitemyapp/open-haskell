@@ -1,0 +1,7 @@
+---
+week: 5
+date: 11 February
+topic: More polymorphism and type classes
+name: 04-type-classes
+due: Monday, 18 February
+---
