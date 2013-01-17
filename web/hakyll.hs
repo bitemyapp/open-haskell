@@ -7,6 +7,11 @@ import System.Locale (defaultTimeLocale)
 
 import Hakyll
 
+-- Set this to False to compile a version of the website with links to
+-- all available lecture notes + HWs, not just those in the past.  Be
+-- sure to rm -rf web/_cache before rebuilding.
+filterLecs = False
+
 main = do
   today <- getCurrentDate
 
@@ -62,7 +67,7 @@ compileLectures :: (Integer,Int,Int) -> Compiler (Page String) (Page String)
 compileLectures today =
   requireAllA "lectures/*.markdown" $
   setFieldA "lectures" $
-  arr (filter (before today) >>> map compileSources) >>>
+  arr (if filterLecs then filter (before today) else id >>> map compileSources) >>>
   pageListCompiler id "templates/lecture.markdown" >>^
   (readPandoc Markdown Nothing >>> writePandoc)
 
