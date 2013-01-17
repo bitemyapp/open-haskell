@@ -22,7 +22,8 @@ Installation and coding environment
   emacs](http://projects.haskell.org/haskellmode-emacs/).  Vim comes
   with syntax highlighting for Haskell out of the box; for more
   options [try this vim haskell
-  mode](http://projects.haskell.org/haskellmode-vim/).  Other editors commonly used with Haskell include Nodepad++, TextMate, or Gedit.
+  mode](http://projects.haskell.org/haskellmode-vim/).  Other editors
+  commonly used with Haskell include Nodepad++, TextMate, Gedit, or Sublime.
 
 * If you are familiar/comfortable with
   [Eclipse](http://www.eclipse.org/), there is
@@ -31,8 +32,9 @@ Installation and coding environment
 
 * For the intrepid, there's
   [Yi](http://www.haskell.org/haskellwiki/Yi), a text editor written
-  *and extensible* in Haskell.  It is quite amazing, but tends to be
-  difficult to install.
+  *and extensible* in Haskell (just like emacs is extensible in
+  emacs-lisp).  It is quite amazing, but tends to be difficult to
+  install.
 
 Help/community
 --------------
