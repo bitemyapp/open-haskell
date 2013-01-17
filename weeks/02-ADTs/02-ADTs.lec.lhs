@@ -96,7 +96,7 @@ Data constructors can have more than one argument.
 >   deriving Show
 >
 > brent :: Person
-> brent = Person "Brent" 30 SealingWax
+> brent = Person "Brent" 31 SealingWax
 >
 > stan :: Person
 > stan  = Person "Stan" 94 Cabbage
@@ -171,7 +171,7 @@ to note.
     > baz p@(Person n _ _) = "The name field of (" ++ show p ++ ") is " ++ n
 
         *Main> baz brent
-        "The name field of (Person \"Brent\" 30 SealingWax) is Brent"
+        "The name field of (Person \"Brent\" 31 SealingWax) is Brent"
 
   1. Patterns can be *nested*. For example:
 
