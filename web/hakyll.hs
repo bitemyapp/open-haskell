@@ -10,7 +10,7 @@ import Hakyll
 -- Set this to False to compile a version of the website with links to
 -- all available lecture notes + HWs, not just those in the past.  Be
 -- sure to rm -rf web/_cache before rebuilding.
-filterLecs = False
+filterLecs = True
 
 main = do
   today <- getCurrentDate
