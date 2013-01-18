@@ -2,7 +2,7 @@
 
 import Control.Monad          ( replicateM_, forM_, when )
 import Data.Functor           ( (<$>) )
-import Data.List              ( isPrefixOf )
+import Data.List              ( isPrefixOf, find )
 import Data.Monoid            ( (<>) )
 
 import Development.Shake
@@ -85,6 +85,10 @@ webRules = do
   "web/docs/*" *> \out -> do
     copyFile' (dropDirectory1 out) out
 
+  "web/extras//*" *> \out -> do
+    let (week,f) = splitFileName . dropDirectory1 . dropDirectory1 $ out
+    copyFile' ("weeks" </> week </> "hw" </> f) out
+
 requireBuild :: Action ()
 requireBuild = do
   weekDirs <- getDirectoryDirs "weeks"
@@ -99,6 +103,7 @@ requireBuild = do
       imgFiles <- getDirectoryFiles imgDir "*"
       mapM_ (\f -> copyFile' (imgDir </> f) ("web/images" </> f)) imgFiles
   mkWeek week = do
+    extras    <- getExtras week
     solsExist <- doesFileExist (weekFile week "sols" "lhs")
     return $
       [ weekFile week "hw" "pdf" ]
@@ -110,9 +115,18 @@ requireBuild = do
       , "web/lectures" </> week <.> "html"
       , "web/hw" </> week <.> "pdf"
       ]
+      ++
+      map ("web/extras" </> week </>) extras
 
 weekFile :: FilePath -> String -> String -> FilePath
 weekFile week tag ext = "weeks" </> week </> (week <.> tag) <.> ext
+
+getExtras :: FilePath -> Action [FilePath]
+getExtras week = do
+  wws <- map words <$> readFileLines (weekFile week "" "markdown")
+  case find (\ws -> (not . null $ ws) && (head ws == "extras:")) wws of
+    Nothing -> return []
+    Just fs -> return (tail fs)
 
 --------------------------------------------------
 

@@ -1,8 +1,11 @@
 {-# LANGUAGE OverloadedStrings #-}
 
 import Control.Arrow ((>>>), (>>^), arr)
+import Data.Functor  ((<$>))
 import Data.List     (intercalate)
+import Data.Maybe    (fromMaybe)
 import Data.Time
+import Safe          (readMay)
 import System.Locale (defaultTimeLocale)
 
 import Hakyll
@@ -11,6 +14,7 @@ import Hakyll
 -- all available lecture notes + HWs, not just those in the past.  Be
 -- sure to rm -rf web/_cache before rebuilding.
 filterLecs = True
+curWeek = 2
 
 main = do
   today <- getCurrentDate
@@ -67,7 +71,10 @@ compileLectures :: (Integer,Int,Int) -> Compiler (Page String) (Page String)
 compileLectures today =
   requireAllA "lectures/*.markdown" $
   setFieldA "lectures" $
-  arr (if filterLecs then filter (before today) else id >>> map compileSources) >>>
+  arr ((if filterLecs then filter byWeek else id)
+       >>> map compileExtras
+      )
+  >>>
   pageListCompiler id "templates/lecture.markdown" >>^
   (readPandoc Markdown Nothing >>> writePandoc)
 
@@ -82,17 +89,19 @@ before (y,m,d) page =
           in  (m',d') <= (m,d)
         _ -> False
 
-compileSources :: Page String -> Page String
-compileSources p = setField "sources" sources p
+byWeek :: Page String -> Bool
+byWeek page =
+  fromMaybe False $ (curWeek >=) <$> (readMay =<< getFieldMaybe "week" page)
+
+compileExtras :: Page String -> Page String
+compileExtras p = setField "extra" extras p
   where
-    name    = getField "name" p
-    sources = tex ++ extra
-    tex     = "[tex](static/" ++ name ++ ".tex)"
-    extra   =
-      case getFieldMaybe "extra" p of
+    name   = getField "name" p
+    extras =
+      case getFieldMaybe "extras" p of
         Nothing -> ""
-        Just es -> (", " ++) . intercalate ", " . map linkify . words $ es
-    linkify e = "[" ++ e ++ "](static/" ++ name ++ "/" ++ e ++ ")"
+        Just es -> "[ " ++ (intercalate ", " . map linkify . words $ es) ++ " ]"
+    linkify e = "[" ++ e ++ "](extras/" ++ name ++ "/" ++ e ++ ")"
 
 getCurrentDate :: IO (Integer,Int,Int)
 getCurrentDate = do
