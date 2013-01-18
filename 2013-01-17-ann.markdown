@@ -1,6 +1,7 @@
 Hi everyone,
 
-A few things XXX
+Hope you're having a good start to the semester.  Just a few things to
+bring to your attention:
 
 **Getting set up with Haskell**.  In case you haven't already figured
   it out, the course website
@@ -16,11 +17,14 @@ A few things XXX
   [course website](http://www.cis.upenn.edu/~cis194/) and clicking
   [Lectures & Assignments](http://www.cis.upenn.edu/~cis194/lectures.html).
   
-  To turn in HW 1, XXX
+  Instructions on how to turn in the HW are still being worked out but
+  will be up soon.
   
 **Office hours**.  Tomorrow (1/18) I will hold office hours from
   2:30-4:30.  In the future I will hold office hours every Friday from
   2-4pm.
+  
+  Adi will hold office hours on Mondays from 5-7pm, location TBA.
 
 **MLK Day**.  There will not be class this Monday, January 21, in
   observance of MLK Day (check out the
@@ -30,6 +34,3 @@ A few things XXX
   notes and a new homework assignment** have been posted on the course
   website. You are expected to read through the lecture notes and
   complete the homework assignment, due Monday, January 28.
-  
-
-
