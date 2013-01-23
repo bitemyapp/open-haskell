@@ -29,6 +29,7 @@ main = do
            , "hw/**"
            , "extras/**"
            , "lectures/*.lhs"
+           , "submission/**"
            ]
     static
 
