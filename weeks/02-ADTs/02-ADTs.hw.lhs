@@ -1,25 +1,15 @@
 % -*- LaTeX -*-
-\documentclass{article}
+\documentclass{tufte-handout}
 %include lhs2TeX.fmt
-\usepackage[stable]{footmisc}
-\usepackage{graphicx}
-
-\newcounter{excount}
-\setcounter{excount}{1}
-\newcommand{\exercise}{
-  \vspace{2em}\noindent
-  {\large\textbf{Exercise\ \arabic{excount}}}
-  \addtocounter{excount}{1}
-}
-\newcommand{\opt}{{\large\textbf{(Optional)}} }
-
-\newenvironment{example}{\medskip \noindent \emph{Example}: }{}
-
-\begin{document}
 
 \title{CIS 194: Homework 2}
 \date{}
 \author{Due Thursday January 26}
+
+\usepackage{../hshw}
+
+\begin{document}
+
 \maketitle
 
 \noindent
@@ -256,8 +246,6 @@ function, and the name of the log file to parse.
 \begin{itemize}
 \item We will test your solution on log files other than the ones we have
   given you, so no hardcoding!
-\item To submit your homework, email your |LogAnalysis.hs| file as an
-  attachment to |cis194@seas.upenn.edu|.
 \item You are free (in fact, encouraged) to discuss the assignment
   with any of your classmates as long as you type up your own
   solution.
