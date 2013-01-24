@@ -1,26 +1,17 @@
 % -*- LaTeX -*-
-\documentclass{article}
+\documentclass{tufte-handout}
 %include lhs2TeX.fmt
-\usepackage{graphicx}
-\usepackage[stable]{footmisc}
-\newcounter{excount}
-\setcounter{excount}{1}
-\newcommand{\exercise}{
-  \vspace{2em}\noindent
-  {\large\textbf{Exercise\ \arabic{excount}}}
-  \addtocounter{excount}{1}
-}
-\newcommand{\opt}{{\large\textbf{(Optional)}} }
 
-\newenvironment{example}{\medskip \noindent \emph{Example}: }{}
+\title{CIS 194: Homework 3}
+\date{}
+\author{Due Monday, Feburary 4}
+
+\usepackage{../hshw}
 
 \graphicspath{{images/}}
 
 \begin{document}
 
-\title{CIS 194: Homework 3}
-\date{}
-\author{Due Thursday, February 2}
 \maketitle
 
 \section{Code golf!}
@@ -118,6 +109,7 @@ from the input list.
 
 For example:
 \begin{code}
+skips "ABCD"       == ["ABCD", "BD", "C", "D"]
 skips "hello!"     == ["hello", "el!", "l!", "l", "o", "!"]
 skips [1]          == [[1]]
 skips [True,False] == [[True,False], [False]]
