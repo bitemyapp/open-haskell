@@ -76,7 +76,7 @@ validate n = sumDigits (doubleEveryOther (toDigits n)) `mod` 10 == 0
 -- Alternate version, now that we know about function composition and
 -- operator sections:
 validate' :: Integer -> Bool
-validate' = (== 0) . (`mod` 10) . sumDigits . doubleEveryOther . toDigitsRev
+validate' = (== 0) . (`mod` 10) . sumDigits . doubleEveryOther . toDigits
 
 -- Exercise 5 -----------------------------------------
 
