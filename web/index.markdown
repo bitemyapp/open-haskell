@@ -19,8 +19,8 @@ Instructor: [Brent Yorgey](http://www.cis.upenn.edu/~byorgey/)
 
 TAs:
 
-* Adi Dahiya (office hours: Mondays 5-7pm)
-* Zach Wasserman (office hours: Thursdays 12-1pm)
+* [Adi Dahiya](http://www.adidahiya.com/) (office hours: Mondays 5-7pm)
+* [Zach Wasserman](http://zwass.com/) (office hours: Thursdays 12-1pm)
 
 Course Description
 ------------------
