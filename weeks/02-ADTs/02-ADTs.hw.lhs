@@ -4,7 +4,7 @@
 
 \title{CIS 194: Homework 2}
 \date{}
-\author{Due Thursday January 26}
+\author{Due Monday January 28}
 
 \usepackage{../hshw}
 
