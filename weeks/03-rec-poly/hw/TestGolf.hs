@@ -1,53 +1,69 @@
-
 {-# OPTIONS -Wall #-}
 
+{-
+ - Author:  Adi Dahiya <adahiya@seas.upenn.edu>
+ - Date:    January 26, 2013
+ -}
 module TestGolf where
 
--- import testing frameworks
+import Test.Framework (defaultMain, testGroup)
+import Test.Framework.Providers.HUnit
+import Test.Framework.Providers.QuickCheck2 (testProperty)
 
--- import students' solution file
-import Golf (skips, localMaxima, histogram)
+import Test.HUnit
 
--- working solution (jpmayer)
-skips' :: [a] -> [[a]]
-skips' l = [skipN n l | n <- [1..length l]] where
-  skipN n l' = skipKN 1 n l'
-  skipKN _ _ [] = []
-  skipKN k n (x:xs)
-    | k < n     = skipKN (k+1) n xs
-    | otherwise = x : skipKN 1 n xs
+import Golf     (skips, localMaxima, histogram)
+import qualified GolfSol  as Solution (skips, localMaxima, histogram)
 
-localMaxima' :: [Integer] -> [Integer]
-localMaxima' (a:b:c:xs)
-  | b > a && b > c = b : r
-  | True = r where 
-    r = localMaxima' (b:c:xs)
-localMaxima' _ = []
+tests = [ testGroup "Haskell Code Golf Exercises"
+          [ testCase     "skips 1"      test_skips1
+          , testCase     "skips 2"      test_skips2
+          , testCase     "skips 3"      test_skips3
+          , testCase     "skips 4"      test_skips4
+          , testProperty "skips 5"      prop_skips
 
-histogram' :: [Integer] -> String
-histogram' l = unlines.reverse
-                     $ "0123456789"
-                     : "=========="
-                     : chart l where
+          , testCase     "maxima 1"     test_maxima1
+          , testCase     "maxima 2"     test_maxima2
+          , testCase     "maxima 3"     test_maxima3
+          , testProperty "maxima 4"     prop_maxima
 
-chart :: [Integer] -> [String]
-chart l = takeWhile (elem '*') [chartLine l n | n <- [1..]]
-  
-chartLine :: [Integer] -> Int -> String
-chartLine l n = plot [d | d <- [0..9], atleast n d l]
-  
-atleast :: Int -> Integer -> [Integer] -> Bool
-atleast n _ []     = n == 0
-atleast n i (x:xs) 
-  | n == 0    = True
-  | i == x    = atleast (n-1) i xs
-  | otherwise = atleast n     i xs
-    
-plot :: [Integer] -> String
-plot is = [if elem i is then '*' else ' ' | i <- [0..9]]
-  
-testHist :: [Integer] -> IO ()
-testHist = putStr . histogram'
+          , testCase     "histogram 1"  test_histogram1
+          , testCase     "histogram 2"  test_histogram2
+          , testProperty "histogram 3"  prop_histogram
+          ]
+        ]
 
--- Begin test code
+-- Exercise 1
+test_skips1, test_skips2, test_skips3, test_skips4 :: Assertion
+test_skips1 = ["ABCD", "BD", "C", "D"] @=? skips "ABCD"
+test_skips2 = ["hello!", "el!", "l!", "l", "o", "!"] @=? skips "hello!"
+test_skips3 = [[1]] @=? skips [1]
+test_skips4 = [[True, False], [False]] @=? skips [True, False]
 
+prop_skips :: [Integer] -> Bool
+prop_skips xs = skips xs == Solution.skips xs
+
+-- Exercise 2
+test_maxima1, test_maxima2, test_maxima3 :: Assertion
+test_maxima1 = [9, 6] @=? localMaxima [2,9,5,6,1]
+test_maxima2 = [4]    @=? localMaxima [2,3,4,1,5]
+test_maxima3 = []     @=? localMaxima [1,2,3,4,5]
+
+prop_maxima :: [Integer] -> Bool
+prop_maxima xs = localMaxima xs == Solution.localMaxima xs
+
+output1, output2 :: String
+output1 = " *        \n *        \n *   *    \n==========\n0123456789\n"
+output2 = "    *     \n    *     \n    * *   \n ******  *\n==========\n0123456789\n"
+
+-- Exercise 3
+test_histogram1, test_histogram2 :: Assertion
+test_histogram1 = output1 @=? histogram [1, 1, 1, 5]
+test_histogram2 = output2 @=? histogram [1,4,5,4,6,6,3,4,2,4,9]
+
+prop_histogram :: [Integer] -> Bool
+prop_histogram xs = histogram xs == Solution.histogram xs
+
+
+main :: IO ()
+main = defaultMain tests

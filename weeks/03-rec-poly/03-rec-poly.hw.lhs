@@ -110,7 +110,7 @@ from the input list.
 For example:
 \begin{code}
 skips "ABCD"       == ["ABCD", "BD", "C", "D"]
-skips "hello!"     == ["hello", "el!", "l!", "l", "o", "!"]
+skips "hello!"     == ["hello!", "el!", "l!", "l", "o", "!"]
 skips [1]          == [[1]]
 skips [True,False] == [[True,False], [False]]
 skips []           == []
