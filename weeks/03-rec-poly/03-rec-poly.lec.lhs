@@ -6,7 +6,7 @@ Recursion patterns, polymorphism, and the Prelude
 =================================================
 
 CIS 194 Week 3  
-26 January 2012
+28 January 2013
 
 While completing HW 2, you probably spent a lot of time writing
 explicitly recursive functions.  At this point, you might think that's
@@ -277,16 +277,16 @@ The Prelude
 The `Prelude` is a module with a bunch of standard definitions that
 gets implicitly imported into every Haskell program.  It's worth
 spending some time [skimming through its
-documentation](http://haskell.org/ghc/docs/6.12-latest/html/libraries/base-4.2.0.1/Prelude.html)
+documentation](http://haskell.org/ghc/docs/latest/html/libraries/base/Prelude.html)
 to familiarize oneself with the tools that are available.
 
 Of course, polymorphic lists are defined in the `Prelude`, along with
 [many useful polymorphic functions for working with
-them](http://haskell.org/ghc/docs/6.12-latest/html/libraries/base-4.2.0.1/Prelude.html#11).
+them](http://haskell.org/ghc/docs/latest/html/libraries/base/Prelude.html#11).
 For example, `filter` and `map` are the counterparts to our
 `filterList` and `mapList`.  In fact, the [`Data.List` module contains
 many more list functions
-still](http://www.haskell.org/ghc/docs/7.0-latest/html/libraries/base-4.3.1.0/Data-List.html).  
+still](http://www.haskell.org/ghc/docs/latest/html/libraries/base/Data-List.html).  
 
 Another useful polymorphic type to know is `Maybe`, defined as
 
@@ -298,7 +298,7 @@ A value of type `Maybe a` either contains a value of type `a` (wrapped
 in the `Just` constructor), or it is `Nothing` (representing some sort
 of failure or error). The [`Data.Maybe` module has functions for
 working with `Maybe`
-values](http://www.haskell.org/ghc/docs/7.0-latest/html/libraries/base-4.3.1.0/Data-Maybe.html).
+values](http://www.haskell.org/ghc/docs/latest/html/libraries/base/Data-Maybe.html).
 
 Total and partial functions
 ---------------------------
@@ -315,7 +315,7 @@ type `a`.  For example, the Prelude function `head` has this type.
 
 ...But what happens if `head` is given an empty list as input?  Let's
 look at the [source
-code](http://www.haskell.org/ghc/docs/7.0-latest/html/libraries/base-4.3.1.0/src/GHC-List.html#head)
+code](http://www.haskell.org/ghc/docs/latest/html/libraries/base/src/GHC-List.html#head)
 for `head`...  
 
 It crashes!  There's nothing else it possibly could do, since it must
