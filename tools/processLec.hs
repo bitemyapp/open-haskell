@@ -45,7 +45,7 @@ stripComments targ = concatMap stripComments'
 
     doStrip s
       | "<!--" `isPrefixOf` s && forTarget = inc
-      | otherwise = [RawBlock "html" s]
+      | otherwise = []
       where (Pandoc _ inc) = readLHS . unlines . init . tail . lines $ s
             forTarget      = upper (head . words . show $ targ) `elem`
                              (map upper . words . head . lines . drop 4 $ s)

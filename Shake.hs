@@ -38,7 +38,7 @@ chooseMode mode = cis194Rules <> choose mode
     choose (Deploy {})  = doDeploy
 
 cis194Rules :: Rules ()
-cis194Rules = genericRules <> webRules
+cis194Rules = genericRules <> webRules <> weekRules
 
 doBuild = action $ requireBuild
 
@@ -89,6 +89,15 @@ webRules = do
     let (week,f) = splitFileName . dropDirectory1 . dropDirectory1 $ out
     copyFile' ("weeks" </> week </> "hw" </> f) out
 
+weekRules :: Rules ()
+weekRules = do
+  "weeks//*.inclass.lhs" *> \out -> do
+    let base = takeBaseName . takeBaseName $ out
+        f    = weekFile base "lec" "lhs"
+    need [f, "tools/processLec.hs.exe"]
+    system' "tools/processLec.hs.exe"
+      [ "class",  f, "-o", out ]
+
 requireBuild :: Action ()
 requireBuild = do
   weekDirs <- getDirectoryDirs "weeks"
@@ -103,12 +112,16 @@ requireBuild = do
       imgFiles <- getDirectoryFiles imgDir "*"
       mapM_ (\f -> copyFile' (imgDir </> f) ("web/images" </> f)) imgFiles
   mkWeek week = do
-    extras    <- getExtras week
-    solsExist <- doesFileExist (weekFile week "sols" "lhs")
+    extras      <- getExtras week
+    solsExist   <- doesFileExist (weekFile week "sols" "lhs")
+    slidesExist <- doesFileExist (weekFile week "slides" "lhs")
     return $
-      [ weekFile week "hw" "pdf" ]
+      [ weekFile week "hw" "pdf"
+      , weekFile week "inclass" "lhs"]
       ++
       [ weekFile week "sols" "pdf" | solsExist ]
+      ++
+      [ weekFile week "slides" "pdf" | slidesExist ]
       ++
       [ "web/lectures" </> week <.> "markdown"
       , "web/lectures" </> week <.> "lhs"
@@ -168,4 +181,3 @@ genericRules = do
 
 
 --------------------------------------------------
-

@@ -11,9 +11,14 @@ _site
 *.tex
 *.pdf
 *.out
+*.nav
+*.snm
+*.toc
+*.vrb
 web/hw/*
 web/lectures/*
 web/images/*
 web/extras/*
 .diagrams_cache
 *diagrams-latex-fig*
+*.inclass.*

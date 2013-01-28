@@ -18,7 +18,7 @@
 
 \title{CIS 194: Haskell}
 \author{Brent Yorgey}
-\date{Week 3: January 26, 2012}
+\date{Week 3: January 28, 2013}
 
 \AtBeginSection[]
 {
@@ -49,12 +49,8 @@
 \section{Recursion patterns}
 
 \begin{frame}{Big idea}
-  \begin{itemize}
-  \item \textit{First-class functions} let us abstract common
+  \textit{First-class functions} let us abstract common
     recursion patterns.
-  \item First-class recursion patterns are wholemeal programming!
-  \end{itemize}
-
 \end{frame}
 
 \begin{frame}{Lists, again}

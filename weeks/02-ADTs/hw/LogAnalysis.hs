@@ -1,11 +1,9 @@
--- CIS 194, Fall 2010
+-- CIS 194, Spring 2013
 --
 -- Sample solution for HW 2.
 
 {-# OPTIONS_GHC -Wall #-}
 module LogAnalysis where
-import Data.Char (toUpper)
-import Data.List (isInfixOf)
 import Log
 
 -- | Parse a single line into a LogMessage object.
@@ -22,6 +20,15 @@ parseMessage m = parseAux . words $ m
 parse :: String -> [LogMessage]
 parse = map parseMessage . lines
 
+insert :: LogMessage -> MessageTree -> MessageTree
+insert (Unknown _) t = t
+insert msg Leaf = Node Leaf msg Leaf
+insert msg@(LogMessage _ ts _) (Node l msg'@(LogMessage _ ts' _) r)
+  | ts < ts'  = Node (insert msg l) msg' r
+  | otherwise = Node l msg' (insert msg r)
+insert _ t@(Node _ (Unknown _) _) = t
+
+{-
 -- | Split a list of log messages into the messages which happened
 --   before a major (severity > 50) error, and those which happened
 --   after (the error itself is included with the ones after).
@@ -55,3 +62,4 @@ getMsg (Unknown s)          = s
 upperWord :: String -> String
 upperWord = map toUpper
 
+-}
