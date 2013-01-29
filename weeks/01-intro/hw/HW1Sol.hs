@@ -1,6 +1,6 @@
 {-# OPTIONS_GHC -Wall #-}
 
--- CIS 194, Fall 2010
+-- CIS 194, Spring 2013
 --
 -- Sample solution for HW 1.  For each problem, a solution is provided
 -- which models a good solution along the lines we were expecting. For
