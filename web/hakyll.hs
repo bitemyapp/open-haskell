@@ -39,6 +39,7 @@ main = do
 
   match (list [ "index.markdown"
               , "resources.markdown"
+              , "policies.markdown"
               , "final.markdown"
               ]
         )
