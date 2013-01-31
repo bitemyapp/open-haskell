@@ -14,7 +14,7 @@ import Hakyll
 -- all available lecture notes + HWs, not just those in the past.  Be
 -- sure to rm -rf web/_cache before rebuilding.
 filterLecs = True
-curWeek = 3
+curWeek = 4
 
 main = do
   today <- getCurrentDate

@@ -6,7 +6,7 @@ Higher-order programming and type inference
 ===========================================
 
 CIS 194 Week 4  
-2 February 2012
+4 February 2013
 
 Suggested reading:
 
@@ -372,7 +372,7 @@ Now let's rewrite `sum'`, `product'`, and `length'` in terms of `fold`:
 even `(const (1+))`.)
 
 Of course, `fold` is already provided in the standard Prelude, under
-the name [`foldr`](http://haskell.org/ghc/docs/6.12.1/html/libraries/base-4.2.0.0/Prelude.html#v:foldr). The arguments to `foldr` are in a slightly
+the name [`foldr`](http://haskell.org/ghc/docs/latest/html/libraries/base/Prelude.html#v:foldr). The arguments to `foldr` are in a slightly
 different order but it's the exact same function.  Here are some
 Prelude functions which are defined in terms of `foldr`:
 
@@ -384,11 +384,11 @@ Prelude functions which are defined in terms of `foldr`:
   * `any`     `:: (a -> Bool) -> [a] -> Bool`
   * `all`     `:: (a -> Bool) -> [a] -> Bool`
 
-There is also [`foldl`](http://haskell.org/ghc/docs/6.12.1/html/libraries/base-4.2.0.0/Prelude.html#v:foldl), which folds "from the left".  That is,
+There is also [`foldl`](http://haskell.org/ghc/docs/latest/html/libraries/base/Prelude.html#v:foldl), which folds "from the left".  That is,
 
     foldr f z [a,b,c] == a `f` (b `f` (c `f` z))
     foldl f z [a,b,c] == ((z `f` a) `f` b) `f` c
 
 In general, however, you should use [`foldl'` from
-`Data.List`](http://haskell.org/ghc/docs/6.12.1/html/libraries/base-4.2.0.0/Data-List.html#v:foldl)
+`Data.List`](http://haskell.org/ghc/docs/latest/html/libraries/base/Data-List.html#v:foldl)
 instead, which does the same thing as `foldl` but is more efficient.
