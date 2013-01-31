@@ -1,65 +1,55 @@
--- CIS 194, Spring 2013
---
--- Sample solution for HW 2.
-
 {-# OPTIONS_GHC -Wall #-}
+
 module LogAnalysis where
+
 import Log
 
--- | Parse a single line into a LogMessage object.
 parseMessage :: String -> LogMessage
-parseMessage m = parseAux . words $ m
-  where parseAux ("I":txt)     = buildMsg Info txt
-        parseAux ("W":txt)     = buildMsg Warning txt
-        parseAux ("E":lvl:txt) = buildMsg (Error (read lvl)) txt
-        parseAux _             = Unknown m
-        buildMsg tag (ts:rst)  = LogMessage tag (read ts) (unwords rst)
-        buildMsg _ _           = Unknown m
+parseMessage m = case words m of
+  (ty:n:time:msg) | ty == "E" ->
+    LogMessage (Error (read n)) (read time) (unwords msg)
+  (ty:time:msg)
+    | ty == "I" -> LogMessage Info (read time) (unwords msg)
+    | ty == "W" -> LogMessage Warning (read time) (unwords msg)
+  x -> Unknown (unwords x)
 
--- | Parse an entire file full of log messages.
+parseLines :: [String] -> [LogMessage]
+parseLines = map parseMessage
+
 parse :: String -> [LogMessage]
-parse = map parseMessage . lines
+parse m = parseLines (lines m)
+
+messageBefore :: LogMessage -> LogMessage -> Bool
+messageBefore (LogMessage _ t1 _) (LogMessage _ t2 _) = t1 < t2
+messageBefore _ _ = error "Cannot compare Unknown"
 
 insert :: LogMessage -> MessageTree -> MessageTree
-insert (Unknown _) t = t
-insert msg Leaf = Node Leaf msg Leaf
-insert msg@(LogMessage _ ts _) (Node l msg'@(LogMessage _ ts' _) r)
-  | ts < ts'  = Node (insert msg l) msg' r
-  | otherwise = Node l msg' (insert msg r)
-insert _ t@(Node _ (Unknown _) _) = t
+insert m Leaf = Node Leaf m Leaf
+insert m (Node l m' r)
+  | m `messageBefore` m' = Node (insert m l) m' r
+  | otherwise = Node l m' (insert m r)
 
-{-
--- | Split a list of log messages into the messages which happened
---   before a major (severity > 50) error, and those which happened
---   after (the error itself is included with the ones after).
-findBigError :: [LogMessage] -> ([LogMessage], [LogMessage])
-findBigError = break bigDeal
-  where bigDeal (LogMessage (Error lvl) _ _) = lvl > 50
-        bigDeal _ = False
+build :: [LogMessage] -> MessageTree
+build = build' Leaf
 
--- | Extract the warning messages associated with the component that
---   failed.
+build' :: MessageTree -> [LogMessage] -> MessageTree
+build' t [] = t
+build' t (m:ms) = build' (insert m t) ms
+
+inOrder :: MessageTree -> [LogMessage]
+inOrder Leaf = []
+inOrder (Node l m r) = inOrder l ++ [m] ++ inOrder r
+
 whatWentWrong :: [LogMessage] -> [String]
-whatWentWrong msgs = relevantWarnings (head $ words failTxt) prefix
-  where (prefix, bigError : _) = findBigError msgs
-        failTxt                = getMsg bigError
+whatWentWrong m = getMessageTexts (inOrder (build (filterMessages m)))
 
--- | Given the name of the component that failed, extract warnings
---   which mention that component.
-relevantWarnings :: String -> [LogMessage] -> [String]
-relevantWarnings keyword = filter relevant . map getMsg . filter isWarning
-  where isWarning (LogMessage Warning _ _) = True
-        isWarning _                        = False
-        relevant txt                       = upperWord keyword `isInfixOf`
-                                             upperWord txt
+filterMessages :: [LogMessage] -> [LogMessage]
+filterMessages [] = []
+filterMessages (e@(LogMessage (Error x) _ _):ms)
+  | x >= 50 = e : filterMessages ms
+filterMessages (_:ms) = filterMessages ms
 
--- | Get the message payload of a LogMessage object.
-getMsg :: LogMessage -> String
-getMsg (LogMessage _ _ msg) = msg
-getMsg (Unknown s)          = s
-
--- | Convert a word to all uppercase.
-upperWord :: String -> String
-upperWord = map toUpper
-
--}
+getMessageTexts :: [LogMessage] -> [String]
+getMessageTexts [] = []
+getMessageTexts (LogMessage _ _ m:ms) = m : getMessageTexts ms
+getMessageTexts (_:ms) = "Unknown" : getMessageTexts ms
