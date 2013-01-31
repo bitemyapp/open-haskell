@@ -271,6 +271,8 @@ variation", that is, arguments which will often be the same should be
 listed first, and arguments which will often be different should come
 last.
 
+**Wholemeal programming**
+
 Let's put some of the things we've just learned together in an example
 that also shows the power of a "wholemeal" style of programming.
 Consider the function `foobar`, defined as follows:
