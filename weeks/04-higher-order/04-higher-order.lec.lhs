@@ -25,7 +25,7 @@ which keeps only those `Integers` from the input list which are
 greater than 100.  For example, 
 
 ~~~~ {.haskell}
-biggerThan100 [1,9,349,6,907,98,105] = [349,907,105].
+greaterThan100 [1,9,349,6,907,98,105] = [349,907,105].
 ~~~~
 
 By now, we know a nice way to do this:
