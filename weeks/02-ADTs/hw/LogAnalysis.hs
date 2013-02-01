@@ -30,11 +30,10 @@ insert m (Node l m' r)
   | otherwise = Node l m' (insert m r)
 
 build :: [LogMessage] -> MessageTree
-build = build' Leaf
-
-build' :: MessageTree -> [LogMessage] -> MessageTree
-build' t [] = t
-build' t (m:ms) = build' (insert m t) ms
+build = build' Leaf where
+  build' :: MessageTree -> [LogMessage] -> MessageTree
+  build' t [] = t
+  build' t (m:ms) = build' (insert m t) ms
 
 inOrder :: MessageTree -> [LogMessage]
 inOrder Leaf = []
@@ -44,10 +43,10 @@ whatWentWrong :: [LogMessage] -> [String]
 whatWentWrong m = getMessageTexts (inOrder (build (filterMessages m)))
 
 filterMessages :: [LogMessage] -> [LogMessage]
-filterMessages [] = []
-filterMessages (e@(LogMessage (Error x) _ _):ms)
-  | x >= 50 = e : filterMessages ms
-filterMessages (_:ms) = filterMessages ms
+filterMessages = filter filterMessage where
+  filterMessage :: LogMessage -> Bool
+  filterMessage (LogMessage (Error val) _ _) = val >= 50
+  filterMessage _ = False
 
 getMessageTexts :: [LogMessage] -> [String]
 getMessageTexts [] = []
