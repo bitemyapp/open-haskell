@@ -24,6 +24,7 @@ messageBefore (LogMessage _ t1 _) (LogMessage _ t2 _) = t1 < t2
 messageBefore _ _ = error "Cannot compare Unknown"
 
 insert :: LogMessage -> MessageTree -> MessageTree
+insert (Unknown _) t = t
 insert m Leaf = Node Leaf m Leaf
 insert m (Node l m' r)
   | m `messageBefore` m' = Node (insert m l) m' r
@@ -40,7 +41,7 @@ inOrder Leaf = []
 inOrder (Node l m r) = inOrder l ++ [m] ++ inOrder r
 
 whatWentWrong :: [LogMessage] -> [String]
-whatWentWrong m = getMessageTexts (inOrder (build (filterMessages m)))
+whatWentWrong m = getMessageStrings (inOrder (build (filterMessages m)))
 
 filterMessages :: [LogMessage] -> [LogMessage]
 filterMessages = filter filterMessage where
@@ -48,7 +49,8 @@ filterMessages = filter filterMessage where
   filterMessage (LogMessage (Error val) _ _) = val >= 50
   filterMessage _ = False
 
-getMessageTexts :: [LogMessage] -> [String]
-getMessageTexts [] = []
-getMessageTexts (LogMessage _ _ m:ms) = m : getMessageTexts ms
-getMessageTexts (_:ms) = "Unknown" : getMessageTexts ms
+getMessageStrings :: [LogMessage] -> [String]
+getMessageStrings = map messageString where
+  messageString :: LogMessage -> String
+  messageString (LogMessage _ _ m) = m
+  messageString _ = "Unknown"
