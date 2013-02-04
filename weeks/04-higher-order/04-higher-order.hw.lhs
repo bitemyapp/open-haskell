@@ -141,4 +141,23 @@ foldl f z [x1, x2, ..., xn] == (...((z `f` x1) `f` x2) `f`...) `f` xn
 
 \end{enumerate}
 
+\exerciseset{Finding primes}
+
+Read about the \href{http://en.wikipedia.org/wiki/Sieve_of_Sundaram}
+{Sieve of Sundaram}. Implement the algorithm using function composition.
+Given an integer |n|, your function should generate all the prime numbers up to
+|2n + 2|.
+
+To give you some help, we've provided a function to get the cartesian
+product of two lists. This is similar to `zip`, but it produces all possible
+pairs instead of matching up the list elements. It's written using list
+comprehensions, which we haven't gotten to yet (but feel free to research them).
+
+\begin{code}
+cartProd :: [a] -> [b] -> [(a, b)]
+cartProd xs ys = [(x,y) | x <- xs, y <- ys]
+
+sieveSundaram :: Integer -> [Integer]
+\end{code}
+
 \end{document}
