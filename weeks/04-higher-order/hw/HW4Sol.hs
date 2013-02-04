@@ -108,16 +108,16 @@ sieveSundaram :: Integer -> [Integer]
 sieveSundaram n = map ((+1).(*2)) filtered where
 
   filtered :: [Integer]
-  filtered = filter (\x -> x `notElem` toFilter) [1..n]
+  filtered = filter (`notElem` toFilter) [1..n]
 
   toFilter :: [Integer]
-  toFilter = foldl (\acc x -> f x ++ acc) [] [1..n]
+  toFilter = concatMap f [1..n]
 
   f :: Integer -> [Integer]
-  f x = filter (<= n) (map (\(i, j) -> i + j + 2 * i * j) (cartProd [1..x] [1..n]))
+  f x = filter (<= n) (map (\(i, j) -> i+j+2*i*j) (cartProd [1..x] [1..n]))
 
 -- A more advanced solution, just to give you a taste of the power of list
--- comprehensions:
+-- comprehensions and guards:
 sieveSundaram' :: Int -> [Int]
 sieveSundaram' n = [ x*2+1 | x <- [1..n],
                              x `notElem` [ i+j+2*i*j | j <- [1..n],
