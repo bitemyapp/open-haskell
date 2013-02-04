@@ -15,6 +15,7 @@ _site
 *.snm
 *.toc
 *.vrb
+*.swp
 web/hw/*
 web/lectures/*
 web/images/*
