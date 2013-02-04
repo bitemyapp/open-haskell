@@ -8,36 +8,13 @@
 
 \title{CIS 194: Homework 4}
 \date{}
-\author{Due Thursday, February 9}
+\author{Due Monday, February 11}
 \maketitle
 
 
 \textbf{What to turn in}: you should turn a single |.hs| (or |.lhs|)
 file, which \textbf{must type check}.
 
-\exerciset{Higher-order programming}
-
-Implement a function with each of the following type signatures.
-(There may be more than one correct solution for a given type
-signature---any function which can be assigned the given type
-signature is a correct solution.)  However, your solutions should
-still use good style!
-
-\begin{enumerate}
-\item |(a -> a -> b) -> [a] -> Maybe b|
-\item |(a -> c) -> (b -> c) -> [Either a b] -> [c]|
-\item |((a -> r) -> r) -> (a -> ((b -> r) -> r)) -> ((b -> r) -> r)|
-\end{enumerate}
-
-As a clarification, it is OK if your solutions are \emph{more general}
-than the required type.  As an example, if you were required to write
-a function of type |Int -> Int|, it would be acceptable to write
-\begin{code}
-f :: Int -> Int
-f x = x
-\end{code}
-since this typechecks, even though \texttt{ghc} will infer the more
-general type |a -> a| for |f| if the type signature is removed.
 
 \exerciset{Wholemeal programming}
 
@@ -69,12 +46,62 @@ Hint: For this problem you may wish to use the functions |iterate| and
 they do.
 \end{enumerate}
 
-\exerciset{Folds}
+
+\exerciset{Folding with trees}
+
+Recall the definition of a \href{http://en.wikipedia.org/wiki/Binary_tree}
+{binary tree data structure}. A branch of a binary tree is balanced if the
+height of its left and right children differ by no more than 1 (height at a
+node is the number of nodes you must traverse to reach the deepest leaf).
+Write a function that generates a balanced binary tree from a list of values
+using |foldr|.
+
+Assume the data exists in the branches (nodes), as described in the following
+data structure. Note that we keep track of the height of a subtree at each
+node as an |Integer|:
+
+\begin{code}
+data Tree a = Leaf
+            | Branch Integer (Tree a) a (Tree a)
+  deriving (Show, Eq)
+
+foldTree :: [a] -> Tree a
+\end{code}
+
+For example, one sample output would be the following:
+
+\begin{code}
+foldTree [1..10] =
+  Branch 3
+    (Branch 2
+      (Branch 0 Leaf 6 Leaf) 9
+      (Branch 1 (Branch 0 Leaf 2 Leaf) 3 Leaf))
+    10
+    (Branch 2
+      (Branch 1 (Branch 0 Leaf 1 Leaf) 7 Leaf)
+      8
+      (Branch 1 (Branch 0 Leaf 4 Leaf) 5 Leaf))
+
+Visually, the tree looks like this:
+      10
+   /      \
+  9        8
+ / \      / \
+6   3    7   5
+   /    /   /
+  2    1   4
+
+\end{code}
+
+Your solution may not place the nodes in the same exact order, but it should be
+balanced and each subtree should have a correct computed height.
+
+\exerciset{More folds!}
 
 \begin{enumerate}
 \item Implement a function
 \begin{code}
-xor :: [Bool] -> Bool    
+xor :: [Bool] -> Bool
 \end{code}
 which returns |True| if and only if there are an odd number of |True|
 values contained in the input list.  It does not matter how many
@@ -95,6 +122,23 @@ map' f = foldr ...
 
   in such a way that |map'| behaves identically to the standard |map|
   function.
+
+\item Implement |foldl| using |foldr|. That is, complete the definition
+
+\begin{code}
+myFoldl :: (a -> b -> a) -> a -> [b] -> a
+myFoldl f base xs = foldr ...
+\end{code}
+
+  in such a way that |myFoldl| behaves identically to the standard |foldl|
+  function.
+
+  Hint: Study how the application of |foldr| and |foldl| work out:
+\begin{code}
+foldr f z [x1, x2, ..., xn] == x1 `f` (x2 `f` ... (xn `f` z)...)
+foldl f z [x1, x2, ..., xn] == (...((z `f` x1) `f` x2) `f`...) `f` xn
+\end{code}
+
 \end{enumerate}
 
 \end{document}
