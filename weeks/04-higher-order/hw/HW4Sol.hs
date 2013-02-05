@@ -16,11 +16,11 @@ fun1 (x:xs)
   | otherwise = fun1 xs
 
 fun1' :: [Integer] -> Integer
-fun1' = foldr (*) 1 . map (\x->x-2) . filter even
+fun1' = product . map (\x -> x - 2) . filter even
 
 fun2 :: Integer -> Integer
 fun2 1 = 0
-fun2 n 
+fun2 n
   | even n    = n + fun2 (n `div` 2)
   | otherwise = fun2 (3 * n + 1)
 
@@ -80,7 +80,7 @@ xor = foldl (/=) False
 
 -- Write map using foldr
 map' :: (a -> b) -> [a] -> [b]
-map' f = foldr (\x ys -> f x : ys) []
+map' f = foldr ((:) . f) []
 
 -- Write foldl using foldr
 -- Hint: Study how the application of `foldr` and `foldl` works out:
@@ -105,7 +105,7 @@ cartProd :: [a] -> [b] -> [(a, b)]
 cartProd xs ys = [(x,y) | x <- xs, y <- ys]
 
 sieveSundaram :: Integer -> [Integer]
-sieveSundaram n = map ((+1).(*2)) filtered where
+sieveSundaram n = map (\x -> 2 * x + 1) filtered where
 
   filtered :: [Integer]
   filtered = filter (`notElem` toFilter) [1..n]
@@ -114,11 +114,14 @@ sieveSundaram n = map ((+1).(*2)) filtered where
   toFilter = concatMap f [1..n]
 
   f :: Integer -> [Integer]
-  f x = filter (<= n) (map (\(i, j) -> i+j+2*i*j) (cartProd [1..x] [1..n]))
+  f x = filter (<= n) . map opPair $ cartProd [1..x] [1..n]
+
+  opPair :: (Integer, Integer) -> Integer
+  opPair (i, j) = i + j + 2 * i * j
 
 -- A more advanced solution, just to give you a taste of the power of list
 -- comprehensions and guards:
-sieveSundaram' :: Int -> [Int]
+sieveSundaram' :: Integer -> [Integer]
 sieveSundaram' n = [ x*2+1 | x <- [1..n],
                              x `notElem` [ i+j+2*i*j | j <- [1..n],
                                                        i <- [1..j],
