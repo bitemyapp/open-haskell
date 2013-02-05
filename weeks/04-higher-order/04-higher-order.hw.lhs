@@ -1,17 +1,17 @@
 % -*- LaTeX -*-
-\documentclass{article}
+\documentclass{tufte-handout}
 %include lhs2TeX.fmt
 
 \usepackage{hyperref}
 \usepackage{../hshw}
 
-\begin{document}
-
 \title{CIS 194: Homework 4}
 \date{}
 \author{Due Monday, February 11}
-\maketitle
 
+\begin{document}
+
+\maketitle
 
 \textbf{What to turn in}: you should turn a single |.hs| (or |.lhs|)
 file, which \textbf{must type check}.
@@ -21,11 +21,11 @@ file, which \textbf{must type check}.
 
 Reimplement each of the following functions in a more idiomatic
 Haskell style.  Use \emph{wholemeal programming} practices, breaking
-each function into a sequence of incremental transformations of an
+each function into a pipeline of incremental transformations to an
 entire data structure.
 
 \begin{enumerate}
-\item 
+\item
 \begin{code}
 fun1 :: [Integer] -> Integer
 fun1 []     = 1
@@ -50,40 +50,49 @@ they do.
 
 \exerciset{Folding with trees}
 
-Recall the definition of a \href{http://en.wikipedia.org/wiki/Binary_tree}
-{binary tree data structure}. A branch of a binary tree is balanced if the
-height of its left and right children differ by no more than 1 (height at a
-node is the number of nodes you must traverse to reach the deepest leaf).
-Write a function that generates a balanced binary tree from a list of values
-using |foldr|.
+Recall the definition of a
+\href{http://en.wikipedia.org/wiki/Binary_tree} {binary tree data
+  structure}. The \term{height} of a binary tree is the length of a
+path from the root to the deepest node.  For example, the height of a
+tree with a single node is $0$; the height of a tree with three nodes,
+whose root has two children, is $1$; and so on.  A binary tree is
+\term{balanced} if the height of its left and right subtrees differ by
+no more than $1$, and its left and right subtrees are also
+balanced.
 
-Assume the data exists in the branches (nodes), as described in the following
-data structure. Note that we keep track of the height of a subtree at each
-node as an |Integer|:
+You should use the following data structure to represent binary trees,
+provided in |Tree.hs|.  Note that each node stores an extra |Integer|
+representing the height at that node.
 
 \begin{code}
 data Tree a = Leaf
-            | Branch Integer (Tree a) a (Tree a)
+            | Node Integer (Tree a) a (Tree a)
   deriving (Show, Eq)
-
-foldTree :: [a] -> Tree a
 \end{code}
+
+For this exercise, write a function
+\begin{spec}
+foldTree :: [a] -> Tree a
+\end{spec}
+which generates a balanced binary tree from a list of values using
+|foldr|.
 
 For example, one sample output would be the following:
 
 \begin{code}
 foldTree [1..10] =
-  Branch 3
-    (Branch 2
-      (Branch 0 Leaf 6 Leaf) 9
-      (Branch 1 (Branch 0 Leaf 2 Leaf) 3 Leaf))
+  Node 3
+    (Node 2
+      (Node 0 Leaf 6 Leaf) 9
+      (Node 1 (Node 0 Leaf 2 Leaf) 3 Leaf))
     10
-    (Branch 2
-      (Branch 1 (Branch 0 Leaf 1 Leaf) 7 Leaf)
+    (Node 2
+      (Node 1 (Node 0 Leaf 1 Leaf) 7 Leaf)
       8
-      (Branch 1 (Branch 0 Leaf 4 Leaf) 5 Leaf))
+      (Node 1 (Node 0 Leaf 4 Leaf) 5 Leaf))
+\end{code}
 
-Visually, the tree looks like this:
+\begin{code}
       10
    /      \
   9        8
@@ -91,7 +100,6 @@ Visually, the tree looks like this:
 6   3    7   5
    /    /   /
   2    1   4
-
 \end{code}
 
 Your solution may not place the nodes in the same exact order, but it should be
