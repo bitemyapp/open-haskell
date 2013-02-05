@@ -2,6 +2,7 @@
 \documentclass{article}
 %include lhs2TeX.fmt
 
+\usepackage{hyperref}
 \usepackage{../hshw}
 
 \begin{document}
@@ -141,7 +142,7 @@ foldl f z [x1, x2, ..., xn] == (...((z `f` x1) `f` x2) `f`...) `f` xn
 
 \end{enumerate}
 
-\exerciseset{Finding primes}
+\exerciset{Finding primes}
 
 Read about the \href{http://en.wikipedia.org/wiki/Sieve_of_Sundaram}
 {Sieve of Sundaram}. Implement the algorithm using function composition.
