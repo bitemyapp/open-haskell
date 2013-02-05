@@ -6,6 +6,7 @@
 \date{}
 \author{Due Monday, January 14}
 
+\usepackage[stable]{footmisc} % for putting footnotes in section headings
 \usepackage{../hshw}
 
 \begin{document}
