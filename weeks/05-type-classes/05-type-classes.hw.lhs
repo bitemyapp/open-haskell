@@ -1,13 +1,14 @@
 % -*- LaTeX -*-
-\documentclass{article}
+\documentclass{tufte-handout}
 %include lhs2TeX.fmt
 \usepackage{../hshw}
 
-\begin{document}
-
 \title{CIS 194: Homework 5}
 \date{}
-\author{Due Thursday, February 16}
+\author{Due Monday, 18 February}
+
+\begin{document}
+
 \maketitle
 
 \begin{itemize}
@@ -45,11 +46,11 @@ data ExprT  = Lit Integer
 
 This type is capable of representing expressions involving integer
 constants, addition, and multiplication.  For example, the expression
-$(2 + 3) \times 4$ would be represented by the value |Mul (Add (Lit 2)
-(Lit 3)) (Lit 4)|.  Your boss has already provided the definition of
-|ExprT| in \texttt{ExprT.hs}, so as usual you just need to add |import
-ExprT| to the top of your file.  However, this is where your boss got
-stuck.
+$(2 + 3) \times 4$ would be represented by the value \[ |Mul (Add (Lit
+2) (Lit 3)) (Lit 4)|. \] Your boss has already provided the definition
+of |ExprT| in \texttt{ExprT.hs}, so as usual you just need to add
+|import ExprT| to the top of your file.  However, this is where your
+boss got stuck.
 
 \exercise
 
@@ -165,14 +166,6 @@ various ways just by using them at various types.
 
 Make instances of |Expr| for each of the following types:
 
-% \begin{itemize}
-% \item |Integer| - works like the original calculator
-% \item |Bool| - every literal value less than or equal to $0$ is
-%   interpreted as |False| and all positive |Int|s are interpreted as |True|
-% \item |MinMax| - ``addition'' is taken to be the |max| function,
-%   while ``multiplication'' is the |min| function
-% \item |Saturated| - all values must be in the inclusive range [0,7]
-% \end{itemize}
 \vspace{0.5cm}
 \begin{tabular*}{8in}{rlcp{3in}}
   \textbullet & |Integer| & --- & works like the original calculator\\
@@ -184,28 +177,31 @@ Make instances of |Expr| for each of the following types:
   \textbullet & |MinMax| & --- & ``addition'' is taken to be the |max| function,
   while ``multiplication'' is the |min| function\\
   \\
-  \textbullet & |Saturated| & --- & all values must stay in the inclusive range [0,7]\\
+  \textbullet & |Mod7| & --- & all values should be in the ranage $0
+  \dots 6$, and all arithmetic is done modulo 7; for
+  example, $5 + 3 = 1$.
 \end{tabular*}
 \vspace{0.5cm}
 
-The last two variants work with |Integer|s internally, but in order to provide
-different instances, we wrap those |Integer|s in |newtype| wrappers. These
-are used just like the |data| constructors we've seen before.
+The last two variants work with |Integer|s internally, but in order to
+provide different instances, we wrap those |Integer|s in |newtype|
+wrappers. These are used just like the |data| constructors we've seen
+before.
 
 \begin{code}
-newtype MinMax = MinMax Integer deriving (Eq, Show)
-newtype Saturated = Saturated Integer deriving (Eq, Show)
+newtype MinMax  = MinMax Integer deriving (Eq, Show)
+newtype Mod7    = Mod7 Integer deriving (Eq, Show)
 \end{code}
 
-There are several possible implementations one could imagine for
-|Saturated|; just make sure that
-\begin{itemize}
-\item |lit| creates a |Saturated| value in the proper range
-\item The implementations of |add| and |mul| are ``compatible'' with
-  the usual addition and multiplication; that is,
-%
-  |add (lit x) (lit y) == lit (x + y)|, and similarly for |mul|.
-\end{itemize}
+% There are several possible implementations one could imagine for
+% |Saturated|; just make sure that
+% \begin{itemize}
+% \item |lit| creates a |Saturated| value in the proper range
+% \item The implementations of |add| and |mul| are ``compatible'' with
+%   the usual addition and multiplication; that is,
+% %
+%   |add (lit x) (lit y) == lit (x + y)|, and similarly for |mul|.
+% \end{itemize}
 
 Once done, the following code should demonstrate our family of
 calculators:
@@ -217,7 +213,7 @@ testExp = parseExp lit add mul "(3 * -4) + 5"
 testInteger  = testExp :: Maybe Integer
 testBool     = testExp :: Maybe Bool
 testMM       = testExp :: Maybe MinMax
-testSat      = testExp :: Maybe Saturated
+testSat      = testExp :: Maybe Mod7
 \end{code}
 
 Try printing out each of those tests in |ghci| to see if things are
@@ -230,7 +226,7 @@ the same syntactic expression!
 You must complete \textbf{at least one of} the following two
 exercises:
 
-\exercise \label{ex:hardware}
+\exercise \label{ex:hardware} \textbf{(do this OR exercise 6)}
 
 The folks down in hardware have finished our new custom CPU, so we'd
 like to target that from now on. The catch is that a stack-based
@@ -296,7 +292,7 @@ compile :: String -> Maybe Program
 which takes |String|s representing arithmetic expressions and compiles
 them into programs that can be run on the custom CPU.
 
-\exercise
+\exercise  \textbf{(do this OR exercise 5)}
 
 Some users of your calculator have requested the ability to give names
 to intermediate values and then reuse these stored values later.
@@ -326,7 +322,7 @@ prefix |M.| whenever you refer to things from |Data.Map|.  This is
 standard practice, since |Data.Map| exports quite a few functions with
 names that overlap with names from the |Prelude|.  Consult the
 |Data.Map| documentation to read about the operations that are
-supported on |Map|s.
+supported on |Map|s.\marginnote{\url{http://hackage.haskell.org/packages/archive/containers/latest/doc/html/Data-Map.html}}
 
 Implement the following instances:
 
@@ -350,12 +346,7 @@ Note: to write these instances you will need to enable the
 \begin{code}
 {-# LANGUAGE FlexibleInstances #-}
 \end{code}
-as the first line in your file.  If you have multiple language
-extensions (for example, if you also did the previous exercise for
-fun), you should combine them into one pragma, like
-\begin{code}
-{-# LANGUAGE FlexibleInstances, TypeSynonymInstances #-}
-\end{code}
+as the first line in your file.
 
 Once you have created these instances, you should be able to test them
 as follows:
