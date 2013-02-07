@@ -184,9 +184,9 @@ foldl f z [x1, x2, ..., xn] == (...((z `f` x1) `f` x2) `f`...) `f` xn
 \exerciset{Finding primes}
 
 Read about the \term{Sieve of
-  Sundaram}\marginnote{\url{http://en.wikipedia.org/wiki/Sieve_of_Sundaram}}. Implement
-the algorithm using function composition.  Given an integer $n$, your
-function should generate all the prime numbers up to $2n + 2$.
+  Sundaram}\marginnote{\url{http://en.wikipedia.org/wiki/Sieve_of_Sundaram}}.
+Implement the algorithm using function composition.  Given an integer $n$, your
+function should generate all the odd prime numbers up to $2n + 2$.
 
 \begin{spec}
 sieveSundaram :: Integer -> [Integer]
