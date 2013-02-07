@@ -9,7 +9,7 @@ More polymorphism and type classes
 ==================================
 
 CIS 194 Week 5  
-9 February 2012
+11 February 2013
 
 Haskell's particular brand of polymorphism is known as *parametric*
 polymorphism.  Essentially, this means that polymorphic functions must
@@ -109,9 +109,9 @@ say that a function like `f :: a -> a -> a` is *parametric* in the
 type `a`.  Here "parametric" is just a fancy term for "works uniformly
 for any type chosen by the caller".  In Java, this style of
 polymorphism is provided by *generics* (which, you guessed it, were
-inspired by Haskell: one of the original designers of Haskell, Phil
-Wadler, was later one of the key players in the development of Java
-generics).
+inspired by Haskell: one of the original designers of Haskell,
+[Philip Wadler](http://homepages.inf.ed.ac.uk/wadler/), was later one
+of the key players in the development of Java generics).
 
 So, what functions actually *could* have this type?  Actually, there
 are only two!
@@ -184,7 +184,7 @@ Type classes
 ------------
 
 `Num`, `Eq`, `Ord`, and `Show` are *type classes*, and we say that
-`(==)`, `(<)`, and `(+)` are "type class polymorphic".  Intuitively,
+`(==)`, `(<)`, and `(+)` are "type-class polymorphic".  Intuitively,
 type classes correspond to *sets of types* which have certain
 operations defined for them, and type class polymorphic functions work
 only for types which are instances of the type class(es) in question.
@@ -320,7 +320,7 @@ are more general than Java interfaces:
     Furthermore, because of Java's subtyping, getting two arguments of a
     certain interface type does *not* guarantee that they are actually the
     same type, which makes implementing binary operators such as `(+)`
-    awkward (usually requiring some runtime type checks)
+    awkward (usually requiring some runtime type checks).
 
 **Standard type classes**
 
