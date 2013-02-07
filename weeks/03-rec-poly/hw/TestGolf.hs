@@ -62,7 +62,9 @@ test_histogram1 = output1 @=? histogram [1, 1, 1, 5]
 test_histogram2 = output2 @=? histogram [1,4,5,4,6,6,3,4,2,4,9]
 
 prop_histogram :: [Integer] -> Bool
-prop_histogram xs = histogram xs == Solution.histogram xs
+prop_histogram xs = case filter (\x -> x >= 0 && x < 10) xs of
+  [] -> True
+  xs' -> histogram xs' == Solution.histogram xs'
 
 
 main :: IO ()
