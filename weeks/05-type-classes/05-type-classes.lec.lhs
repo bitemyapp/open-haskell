@@ -326,13 +326,13 @@ are more general than Java interfaces:
 
 Here are some other standard type classes you should know about:
 
-  * [Ord](http://haskell.org/ghc/docs/latest/html/libraries/base-4.2.0.0/Prelude.html#t%3AOrd)
+  * [Ord](http://haskell.org/ghc/docs/latest/html/libraries/base/Prelude.html#t%3AOrd)
     is for types whose elements can be *totally ordered*, that is, where
     any two elements can be compared to see which is less than the other.
     It provides comparison operations like `(<)` and `(<=)`, and also the
     `compare` function.
 
-  * [Num](http://haskell.org/ghc/docs/latest/html/libraries/base-4.2.0.0/Prelude.html#t%3ANum)
+  * [Num](http://haskell.org/ghc/docs/latest/html/libraries/base/Prelude.html#t%3ANum)
     is for "numeric" types, which support things like addition,
     subtraction, and multipication.  One very important thing to note is
     that integer literals are actually type class polymorphic:
@@ -344,13 +344,13 @@ Here are some other standard type classes you should know about:
     `Integer`s, `Double`s, or any other type which is an instance of
     `Num` (`Rational`, `Complex Double`, or even a type you define...)
 
-  * [Show](http://haskell.org/ghc/docs/latest/html/libraries/base-4.2.0.0/Prelude.html#t%3AShow)
+  * [Show](http://haskell.org/ghc/docs/latest/html/libraries/base/Prelude.html#t%3AShow)
     defines the method `show`, which is used to convert values into
     `String`s.
 
-  * [Read](http://haskell.org/ghc/docs/latest/html/libraries/base-4.2.0.0/Prelude.html#v:Eq/Read) is the dual of `Show`.
+  * [Read](http://haskell.org/ghc/docs/latest/html/libraries/base/Prelude.html#v:Eq/Read) is the dual of `Show`.
 
-  * [Integral](http://haskell.org/ghc/docs/latest/html/libraries/base-4.2.0.0/Prelude.html#t%3AIntegral) represents whole number types such as `Int` and `Integer`.
+  * [Integral](http://haskell.org/ghc/docs/latest/html/libraries/base/Prelude.html#t%3AIntegral) represents whole number types such as `Int` and `Integer`.
 
 **A type class example**
 
