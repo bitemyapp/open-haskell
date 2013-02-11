@@ -15,9 +15,8 @@ import Test.QuickCheck.Function
 
 import Data.List ((\\))
 
-import HW4Sol (Tree(..))
 import qualified HW4Sol as Solution (fun1, fun2, xor, sieveSundaram)
-import HW4 (fun1', fun2', foldTree, xor, map', sieveSundaram)
+import HW4 (Tree(..), fun1', fun2', foldTree, xor, map', sieveSundaram)
 
 tests = [ testGroup "CIS194 HW4 Exercises"
           [ -- Exercise 1
@@ -61,7 +60,7 @@ test_fun24 = test_fun2 13
 -- Exercise 2
 treeFold :: (Integer -> b -> a -> b -> b) -> b -> Tree a -> b
 treeFold _ acc Leaf = acc
-treeFold f acc (Branch h l x r) = f h (treeFold f acc l) x (treeFold f acc r)
+treeFold f acc (Node h l x r) = f h (treeFold f acc l) x (treeFold f acc r)
 
 -- Verify that the elements stay the same after the fold
 prop_elements :: [Int] -> Bool
