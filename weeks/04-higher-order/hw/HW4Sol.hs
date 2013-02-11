@@ -27,7 +27,7 @@ fun2 n
 hailStep :: Integer -> Integer
 hailStep n
   | even n    = n `div` 2
-  | otherwise = (3 * n + 1)
+  | otherwise = 3 * n + 1
 
 fun2' :: Integer -> Integer
 fun2' = sum . filter even . takeWhile (/=1) . iterate hailStep
