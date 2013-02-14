@@ -9,7 +9,7 @@ Lazy evaluation
 ===============
 
 CIS 194 Week 6  
-16 February 2012
+18 February 2012
 
 Suggested reading:
 
@@ -278,6 +278,10 @@ As you can see, `foldl'` does the additions along the way, which is
 what we really want.  But the point is that in this case laziness got
 in the way and we had to make our program *less* lazy.
 
+(If you're interested in learning about *how* `foldl'` achieves this,
+you can
+[read about `seq` on the Haskell wiki](http://www.haskell.org/haskellwiki/Seq).)
+
 **Short-circuiting operators**
 
 In some languages (Java, C++) the boolean operators `&&` and `||`
@@ -339,7 +343,7 @@ surrounding laziness to be considered when defining a function.
 **User-defined control structures**
 
 Taking the idea of short-circuiting operators one step further, in
-Haskell we can define our own *control structures*!
+Haskell we can define our own *control structures*.
 
 Most languages have some sort of special built-in `if` construct.
 Some thought reveals why: in a way similar to short-circuiting Boolean
@@ -406,7 +410,7 @@ Haskell code to solve the
 [0-1 knapsack problem](http://en.wikipedia.org/wiki/Knapsack_problem).
 Note how we simply define the array `m` in terms of itself, using the
 standard recurrence, and let lazy evaluation work out the proper order
-in which to compute its cells!
+in which to compute its cells.
 
 ~~~~ {.haskell}
 import Data.Array
