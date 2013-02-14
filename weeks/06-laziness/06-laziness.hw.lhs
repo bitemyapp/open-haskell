@@ -1,5 +1,5 @@
 % -*- LaTeX -*-
-\documentclass{article}
+\documentclass{tufte-handout}
 %include lhs2TeX.fmt
 \usepackage{../hshw}
 \usepackage{amsmath}
@@ -7,11 +7,12 @@
 \newcommand{\mat}[1]{\mathbf{#1}}
 \newcommand{\F}{\mat{F}}
 
-\begin{document}
-
 \title{CIS 194: Homework 6}
 \date{}
-\author{Due Thursday, February 23}
+\author{Due Monday, February 25}
+
+\begin{document}
+
 \maketitle
 
 \begin{itemize}
@@ -24,9 +25,9 @@ evaluation, namely, the ability to work with infinite data structures.
 
 \section{Fibonacci numbers}
 
-\begin{center}
-\includegraphics[width=3in]{fibonacci-sunflower}
-\end{center}
+\begin{marginfigure}
+\includegraphics[width=2in]{fibonacci-sunflower}
+\end{marginfigure}
 
 The \emph{Fibonacci numbers} $F_n$ are defined as the sequence of
 integers, beginning with $0$ and $1$, where every integer in the
@@ -57,9 +58,9 @@ most compelling:
   either equal or of opposite signs, depending on the parity of $n$.
   If $F_0 = 1$ then everything is off by two.
 \item If $F_0 = 0$ then we can prove the lovely theorem ``If $m$
-  evenly divides $n$, then $F_m$ evenly divides $F_n$.''  If $F_0 = 1$
-  then we have to state this as ``If $m$ evenly divides $n$, then
-  $F_{m-1}$ evenly divides $F_{n-1}$.'' Ugh.
+  evenly divides $n$ if and only if $F_m$ evenly divides $F_n$.''  If
+  $F_0 = 1$ then we have to state this as ``If $m$ evenly divides $n$
+  if and only if $F_{m-1}$ evenly divides $F_{n-1}$.'' Ugh.
 \end{itemize}
 }
 
@@ -84,13 +85,13 @@ get bored watching it after the first $30$ or so Fibonacci numbers,
 because |fib| is ridiculously slow.  Although it is a good way to
 \emph{define} the Fibonacci numbers, it is not a very good way to
 \emph{compute} them---in order to compute $F_n$ it essentially ends up
-adding $1$ to itself $F_n$ times!  For example, shown below is the
-graph of recursive calls made by evaluating |fib 5|.
-
-\begin{center}
-  \includegraphics[width=5in]{fibcalls}
-\end{center}
-
+adding $1$ to itself $F_n$ times!  For example, shown at right is the
+tree of recursive calls made by evaluating |fib 5|.
+\begin{marginfigure}
+  \begin{center}
+  \includegraphics[width=4in,angle=270]{fibcalls}    
+  \end{center}
+\end{marginfigure}
 As you can see, it does a lot of repeated work.  In the end, |fib| has
 running time $O(F_n)$, which (it turns out) is equivalent to
 $O(\varphi^n)$, where $\varphi = \frac{1 + \sqrt{5}}{2}$ is the
@@ -110,12 +111,10 @@ fibs2 :: [Integer]
 so that it has the same elements as |fibs1|, but computing the first
 $n$ elements of |fibs2| requires only $O(n)$ addition operations.  Be
 sure to use standard recursion pattern(s) from the |Prelude| as
-appropriate.
-
-(Of course there are several billion Haskell implementations of the
-Fibonacci numbers on the web, and I have no way to prevent you from
-looking at them; but you'll probably learn a lot more if you try to
-come up with something yourself first.)
+appropriate.  \marginnote[1in]{Of course there are several billion Haskell
+  implementations of the Fibonacci numbers on the web, and I have no
+  way to prevent you from looking at them; but you'll probably learn a
+  lot more if you try to come up with something yourself first.  }
 
 \section{Streams}
 
@@ -123,18 +122,15 @@ We can be more explicit about infinite lists by defining a type
 |Stream| representing lists that \emph{must be} infinite. (The usual
 list type represents lists that \emph{may} be infinite but may also
 have some finite length.)
-
-\begin{center}
+\begin{marginfigure}[0.5in]
   \includegraphics[width=2in]{stream}
-\end{center}
-
+\end{marginfigure}
 In particular, streams are like lists but with \emph{only} a
 ``cons'' constructor---whereas the list type has two constructors,
 |[]| (the empty list) and |(:)| (cons), there is no such thing as an
 \emph{empty stream}.  So a stream is simply defined as an element
 followed by a stream.
 
-\newpage
 \exercise
 
 \begin{itemize}
@@ -157,8 +153,8 @@ instance Show a => Show (Stream a) where
   show ...
 \end{code}
 which works by showing only some prefix of a stream (say, the first
-$20$ elements).  (\emph{Hint}: you may find your |streamToList|
-function useful.)
+$20$ elements).\marginnote{\emph{Hint}: you may find your |streamToList|
+function useful.}
 
 \end{itemize}
 
@@ -213,7 +209,10 @@ ruler :: Stream Integer
 which corresponds to the \emph{ruler function} \[
 0,1,0,2,0,1,0,3,0,1,0,2,0,1,0,4,\dots \] where the $n$th element in
 the stream (assuming the first element corresponds to $n=1$) is the
-largest power of $2$ which evenly divides $n$.
+largest power of $2$ which evenly divides $n$.\marginnote{\emph{Hint}:
+  define a function |interleaveStreams| which alternates the elements
+  from two streams.  Can you use this function to implement |ruler| in
+  a clever way that does not have to do any divisibility testing?}
 \end{itemize}
 
 \section{Fibonacci numbers via generating functions (extra credit)}
@@ -239,23 +238,20 @@ by noting that $x = 0 + 1x + 0x^2 + 0x^3 + \dots$.
 
 \item Define an instance of the |Num| type class for 
 %
-  |Stream Integer|.  A few sadly necessary notes first:
-  \begin{itemize}
-  \item You will have to add \verb|{-# LANGUAGE FlexibleInstances #-}|
-    to the top of your \texttt{.hs} file in order for this instance to
-    be allowed.
-  \item You will also have to go back and add |deriving Eq| to your
-    definition of |Stream|, even though this is somewhat bogus (if two
-    streams are \emph{unequal}, the equality comparison will
-    eventually return |False|, but if they are \emph{equal} it will
-    simply never return).  The reason is that the |Num| class requires
-    |Eq| as well (which is also bogus, |Stream| being an excellent
-    example of why).  Happily, in GHC 7.4 the |Eq| requirement has
-    been removed from |Num|, so if for some reason you have GHC 7.4
-    installed, this bullet point doesn't apply.
-  \end{itemize}
-
-  Now that we have that out of the way, here's what should go in your
+  |Stream Integer|.  \marginnote{Note that you will have to add
+  \verb|{-# LANGUAGE FlexibleInstances #-}| to the top of your
+  \texttt{.hs} file in order for this instance to be allowed.}
+  % \item You will also have to go back and add |deriving Eq| to your
+  %   definition of |Stream|, even though this is somewhat bogus (if two
+  %   streams are \emph{unequal}, the equality comparison will
+  %   eventually return |False|, but if they are \emph{equal} it will
+  %   simply never return).  The reason is that the |Num| class requires
+  %   |Eq| as well (which is also bogus, |Stream| being an excellent
+  %   example of why).  Happily, in GHC 7.4 the |Eq| requirement has
+  %   been removed from |Num|, so if for some reason you have GHC 7.4
+  %   installed, this bullet point doesn't apply.
+  % \end{itemize}
+  Here's what should go in your
   |Num| instance:
   \begin{itemize}
   \item You should implement the |fromInteger| function.  Note that $n
@@ -348,8 +344,8 @@ fibs3 :: Stream Integer
 \section{Fibonacci numbers via matrices (extra credit)}
 
 It turns out that it is possible to compute the $n$th Fibonacci number
-with only $O(\log n)$ arithmetic operations!  This section explains
-one way to do it.
+with only $O(\log n)$ (arbitrary-precision) arithmetic operations.
+This section explains one way to do it.
 
 Consider the $2 \times 2$ matrix $\F$ defined by
 \newcommand{\Fm}{\begin{bmatrix}1 & 1 \\1 & 0\end{bmatrix}}
@@ -424,6 +420,7 @@ The punchline is that Haskell's exponentiation operator |(^)|
 \emph{already uses} this algorithm, so we don't even have to code it
 ourselves!
 
+\newpage
 \exercise \opt
 
 \begin{itemize}
@@ -434,32 +431,32 @@ ourselves!
   you only have to implement the |(*)| method, since that is the only
   one we will use. (If you want to play around with matrix operations
   a bit more, you can implement |fromInteger|, |negate|, and |(+)| as
-  well.)  Don't worry about the warnings telling you that you have not
+  well.)  \marginnote{Don't worry about the warnings telling you that you have not
   implemented the other methods.  (If you want to disable the warnings
   you can add
 \begin{verbatim}
 {-# OPTIONS_GHC -fno-warn-missing-methods #-}
 \end{verbatim}
-  to the top of your file.)
+  to the top of your file.)}
 
 \item We now get fast (logarithmic time) matrix exponentiation for
   free, since |(^)| is implemented using a binary exponentiation
-  algorithm in terms of |(*)|!  Write a function
+  algorithm in terms of |(*)|.  Write a function
   \begin{code}
 fib4 :: Integer -> Integer
   \end{code}
   which computes the $n$th Fibonacci number by raising $\F$ to the
   $n$th power and projecting out $F_n$ (you will also need a special
   case for zero).  Try computing the one millionth or even ten
-  millionth Fibonacci number.  (On my computer the millionth Fibonacci
+  millionth Fibonacci number.\marginnote{On my computer the millionth Fibonacci
   number takes only 0.32 seconds to compute but more than four seconds
   to print on the screen---after all, it has just over two
-  hundred thousand digits.)
+  hundred thousand digits.}
 \end{itemize}
 
 \end{document}
 
 % Local Variables:
 % mode:latex
-% compile-command:"make hw"
+% compile-command:"mk build"
 % End:
