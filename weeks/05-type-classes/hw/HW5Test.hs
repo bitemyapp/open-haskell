@@ -24,7 +24,7 @@ tests = [ testGroup "eval"
           ]
 
         , testGroup "evalStr" $
-          map (\(lbl,assert) -> testCase ("evalStr " ++ show lbl) assert) 
+          map (\(lbl,assert) -> testCase ("evalStr " ++ show lbl) assert)
               (zip [1..] evalStr_tests)
 
         , testGroup "instance ExprT"
@@ -32,7 +32,7 @@ tests = [ testGroup "eval"
           , testProperty "add" prop_ExprT_add
           , testProperty "mul" prop_ExprT_mul
           ]
-          
+
         , testGroup "Integer"
           [ testProperty "lit" prop_Integer_lit
           , testProperty "add" prop_Integer_add
@@ -44,19 +44,19 @@ tests = [ testGroup "eval"
           , testProperty "add" prop_Bool_add
           , testProperty "mul" prop_Bool_mul
           ]
-          
+
         , testGroup "MinMax"
           [ testProperty "lit" prop_MinMax_lit
           , testProperty "add" prop_MinMax_add
           , testProperty "mul" prop_MinMax_mul
           ]
 
-        , testGroup "Saturated"
-          [ testProperty "lit" prop_Saturated_lit
-          , testProperty "add" prop_Saturated_add
-          , testProperty "mul" prop_Saturated_mul
+        , testGroup "Mod7"
+          [ testProperty "lit" prop_Mod7_lit
+          , testProperty "add" prop_Mod7_add
+          , testProperty "mul" prop_Mod7_mul
           ]
-        
+
 
         ]
 
@@ -85,7 +85,7 @@ evalStr_tests = [ evalStr "(2+3)*4" @=? Just 20
 instance Arbitrary ExprT where
   arbitrary = arbExprT 5
 
-arbExprT :: Int -> Gen ExprT  
+arbExprT :: Int -> Gen ExprT
 arbExprT 0 = liftM Lit arbitrary
 arbExprT n = oneof [ arbExprT 0
                    , liftM2 Mul (arbExprT (n-1)) (arbExprT (n-1))
@@ -142,16 +142,15 @@ instance Eq Saturated where
   Saturated x == Saturated y = x == y
 -}
 
-instance Arbitrary Saturated where
-  arbitrary = liftM (Saturated . max 0 . min 7) arbitrary
+instance Arbitrary Mod7 where
+  arbitrary = liftM (Mod7 . (`mod` 7)) arbitrary
 
-prop_Saturated_lit :: Integer -> Bool
-prop_Saturated_lit i = case lit i of
-  Saturated n -> (n >= 0) && (n <= 7)
+prop_Mod7_lit :: Integer -> Bool
+prop_Mod7_lit i = case lit i of
+  Mod7 n -> n == i `mod` 7
 
-prop_Saturated_add :: (Saturated, Saturated) -> Bool
-prop_Saturated_add (a@(Saturated x), b@(Saturated y)) = add a b == lit (x + y)
+prop_Mod7_add :: (Mod7, Mod7) -> Bool
+prop_Mod7_add (a@(Mod7 x), b@(Mod7 y)) = add a b == lit (x + y)
 
-prop_Saturated_mul :: (Saturated, Saturated) -> Bool
-prop_Saturated_mul (a@(Saturated x), b@(Saturated y)) = mul a b == lit (x * y)
-
+prop_Mod7_mul :: (Mod7, Mod7) -> Bool
+prop_Mod7_mul (a@(Mod7 x), b@(Mod7 y)) = mul a b == lit (x * y)
