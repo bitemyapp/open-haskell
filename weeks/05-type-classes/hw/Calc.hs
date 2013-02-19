@@ -73,11 +73,14 @@ instance Expr MinMax where
   add = max
   mul = min
 
-newtype Saturated = Saturated Integer deriving (Show,Eq,Num)
-instance Expr Saturated where
-  lit = Saturated . max 0 . min 7
-  add (Saturated x) (Saturated y) = lit (x + y)
-  mul (Saturated x) (Saturated y) = lit (x * y)
+newtype Mod7 = Mod7 Integer deriving (Eq, Show)
+instance Expr Mod7 where
+  lit = Mod7 . (`mod` 7)
+  add (Mod7 x) (Mod7 y) = Mod7 $ (x + y) `mod` 7
+  mul (Mod7 x) (Mod7 y) = Mod7 $ (x * y) `mod` 7
+
+testExp :: Expr a => Maybe a
+testExp = parseExp lit add mul "(3 * -4) + 5"
 
 ----------------
 -- Exercise 5 --
