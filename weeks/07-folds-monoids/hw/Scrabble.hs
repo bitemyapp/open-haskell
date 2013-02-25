@@ -4,8 +4,11 @@ module Scrabble where
 import Data.Char
 import Data.Monoid
 
-newtype Score = Score { getScore :: Int }
+newtype Score = Score Int
   deriving (Eq, Ord, Show, Num)
+
+getScore :: Score -> Int
+getScore (Score s) = s
 
 instance Monoid Score where
   mempty  = Score 0
