@@ -3,8 +3,11 @@ module Sized where
 
 import Data.Monoid
 
-newtype Size = Size { getSize :: Int }
+newtype Size = Size Int
   deriving (Eq, Ord, Show, Num)
+
+getSize :: Size -> Int
+getSize (Size i) = i
 
 class Sized a where
   size :: a -> Size
