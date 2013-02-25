@@ -10,7 +10,7 @@ Folds and monoids
 =================
 
 CIS 194 Week 7  
-23 February 2012
+25 February 2013
 
 Suggested reading:
 
@@ -19,8 +19,8 @@ Suggested reading:
   * [Fold](http://haskell.org/haskellwiki/Fold) from the Haskell wiki
   * Heinrich Apfelmus, [Monoids and Finger Trees](http://apfelmus.nfshost.com/articles/monoid-fingertree.html)
   * Dan Piponi, [Haskell Monoids and their Uses](http://blog.sigfpe.com/2009/01/haskell-monoids-and-their-uses.html)
-  * [Data.Monoid documentation](http://haskell.org/ghc/docs/6.12.1/html/libraries/base-4.2.0.0/Data-Monoid.html)
-  * [Data.Foldable documentation](http://haskell.org/ghc/docs/6.12.1/html/libraries/base-4.2.0.0/Data-Foldable.html)
+  * [Data.Monoid documentation](http://haskell.org/ghc/docs/latest/html/libraries/base/Data-Monoid.html)
+  * [Data.Foldable documentation](http://haskell.org/ghc/docs/latest/html/libraries/base/Data-Foldable.html)
 
 Folds, again
 ------------
@@ -155,7 +155,7 @@ Monoids
 -------
 
 Here's another standard type class you should know about, found in the
-[`Data.Monoid`](http://haskell.org/ghc/docs/6.12.1/html/libraries/base-4.2.0.0/Data-Monoid.html) module:
+[`Data.Monoid`](http://haskell.org/ghc/docs/latest/html/libraries/base/Data-Monoid.html) module:
 
 > class Monoid m where
 >     mempty  :: m
@@ -167,16 +167,13 @@ Here's another standard type class you should know about, found in the
 > (<>) :: Monoid m => m -> m -> m
 > (<>) = mappend
 
-We define `(<>)` as a synonym for `mappend` simply because writing
-`mappend` is tedious.  Note that `(<>)` is in `Data.Monoid` as of GHC
-7.4.1, but not in previous versions, so for now we have to define it
-ourselves.  Almost everything else we'll look at, however, is already
-provided in `Data.Monoid`.
+`(<>)` is defined as a synonym for `mappend` (as of GHC 7.4.1) simply
+because writing `mappend` is tedious.
 
 Types which are instances of `Monoid` have a special element called
 `mempty`, and a binary operation `mappend` (abbreviated `(<>)`) which
 takes two values of the type and produces another one.  The intention
-is that `mempty` is an identity for `mappend`, and `mappend` is
+is that `mempty` is an identity for `<>`, and `<>` is
 associative; that is, for all `x`, `y`, and `z`,
 
 1. `mempty <> x == x`
@@ -187,8 +184,7 @@ The associativity law means that we can unambiguously write things like
 
 `a <> b <> c <> d <> e`
 
-because we will get the same result no matter how we parenthesize. XXX
-something about + vs / ?
+because we will get the same result no matter how we parenthesize.
 
 There is also `mconcat`, for combining a whole list of values.  By
 default it is implemented using `foldr`, but it is included in the
@@ -241,8 +237,9 @@ Integer`:
 > prod :: Integer
 > prod = getProduct . mconcat . map Product $ lst
 
-(Of course, this particular use case is silly, since we could use
-the standard `product` function instead.)
+(Of course, this particular example is silly, since we could use the
+standard `product` function instead, but this pattern does come in
+handy somtimes.)
 
 Pairs form a monoid as long as the individual components do:
 

@@ -1,28 +1,18 @@
 % -*- LaTeX -*-
-\documentclass{article}
+\documentclass{tufte-handout}
+
 %include lhs2TeX.fmt
-\usepackage{graphicx}
-\usepackage[stable]{footmisc}
-\newcounter{excount}
-\setcounter{excount}{1}
-\newcommand{\exercise}{
-  \vspace{2em}\noindent
-  {\large\textbf{Exercise\ \arabic{excount}}}
-  \addtocounter{excount}{1}
-}
-\newcommand{\opt}{
-  \vspace{2em}\noindent
-  {\large\textbf{(Optional)}} 
-}
+% \usepackage[stable]{footmisc}
 
-\newenvironment{example}{\medskip \noindent \emph{Example}: }{}
-\newenvironment{rem}{\medskip \noindent \textbf{Remark.}}{}
-
-\begin{document}
+\usepackage{../hshw}
+\usepackage{nameref}
 
 \title{CIS 194: Homework 7}
 \date{}
-\author{Due Thursday, March 1}
+\author{Due Monday, March 11}
+
+\begin{document}
+
 \maketitle
 
 \begin{itemize}
@@ -164,6 +154,8 @@ list |jlbToList jl| where some append operations have been
 ``deferred''.  For example, the join-list shown in Figure~\ref{fig:jl}
 corresponds to the list |['y', 'e', 'a', 'h']|.
 
+% TODO draw a better picture representing a simple JoinList structure
+
 Such a structure makes sense for text editing applications as it
 provides a way of breaking the document data into pieces that can be
 processed individually, rather than having to always traverse the
@@ -214,12 +206,15 @@ example we don't need to descend into the subtree containing |'e'| and
 |'a'|, since we have cached the fact that their product is |6|.  This
 means that for balanced join-lists, it takes only $O(\log n)$ time to
 rebuild the annotations after making an edit.
-
-\begin{figure}\centering
-    \includegraphics[width=3in]{images/JoinListDia}
+\begin{marginfigure}[-2in]\centering
+    \includegraphics[width=2in]{images/JoinListDia}
   \caption{A sample join-list annotated with products}
   \label{fig:jl}
-\end{figure}
+\end{marginfigure}
+
+% XXX draw something showing how recomputation happens? one color for
+% read, one color for update, white for neither.
+
 \exercise 
 We first consider how to write some simple operations on these
 |JoinList|s. Perhaps the most important operation we will consider is
@@ -270,6 +265,10 @@ which returns |Just| the $i$th element in a list (starting at zero) if
 such an element exists, or |Nothing| otherwise.  We also consider an
 updated function for converting join-lists into lists, just like
 |jlbToList| but ignoring the monoidal annotations:
+\marginnote{Note: you do not have to include |(!!?)| and |jlToList| in your
+assignment; they are just to help explain how |indexJ| ought to
+behave.  However, you may certainly use them to help test your
+implementations if you wish.}
 \begin{code}
 jlToList :: JoinList m a -> [a]
 jlToList Empty            = []
@@ -284,15 +283,11 @@ and join-list |jl|, it should be the case that
 
 That is, calling |indexJ| on a join-list is the same as first
 converting the join-list to a list and then indexing into the list.
-The point, of course, is that |indexJ| can be more efficient, because
-it gets to use the size annotations to throw away whole parts of the
-tree at once, whereas the list indexing operation has to walk over
-every element.
-
-(Note: you do not have to include |(!!?)| and |jlToList| in your
-assignment; they are just to help explain how |indexJ| ought to
-behave.  However, you may certainly use them to help test your
-implementations if you wish.)
+The point, of course, is that |indexJ| can be more efficient ($O(\log
+n)$ versus $O(n)$, assuming a balanced join-list), because it gets to
+use the size annotations to throw away whole parts of the tree at
+once, whereas the list indexing operation has to walk over every
+element.
 
 \item Implement the function
 
@@ -301,9 +296,8 @@ dropJ :: (Sized b, Monoid b) =>
          Int -> JoinList b a -> JoinList b a
 \end{code}
 The |dropJ| function drops the first |n| elements from a
-|JoinList|. This is analogous to the standard |drop| on lists
-(\emph{e.g.} |drop 3 [1,2,3,4,5] == [4,5]|).  Formally, |dropJ| should
-behave in such a way that
+|JoinList|. This is analogous to the standard |drop| function on
+lists.  Formally, |dropJ| should behave in such a way that
 \begin{spec}
 jlToList (dropJ n jl) == drop n (jlToList jl).
 \end{spec}
@@ -316,8 +310,8 @@ takeJ :: (Sized b, Monoid b) =>
 \end{code}
 The |takeJ| function returns the first |n| elements of a |JoinList|,
 dropping all other elements. Again, this function works similarly to
-the standard library |take| function (\emph{e.g.}  |take 3 [1,2,3,4,5]
-== [1,2,3]|); that is, it should be the case that
+the standard library |take| function; that is, it should be the case
+that
 \begin{spec}
 jlToList (takeJ n jl) == take n (jlToList jl).
 \end{spec}
@@ -331,8 +325,10 @@ into the |JoinList| tree.
 \exercise Mr. Dickens's publishing company has changed their minds.
 Instead of paying him by the word, they have decided to pay him
 according to the scoring metric used by the immensely popular game of
-\textit{Scrabble}$^{\rm TM}$.  You must therefore update your editor
-implementation to count Scrabble scores rather than counting words.
+\textit{Scrabble}$^{\rm TM}$.\marginnote{Scrabble$^{\rm TM}$, of
+  course, was invented in 1842, by Dr. Wilson P. Scrabble$^{\rm TM}$.}
+You must therefore update your editor implementation to count Scrabble
+scores rather than counting words.
 
 Hence, the second annotation you decide to implement is one to cache
 the \textit{Scrabble}$^{\rm TM}$ score for every line in a
@@ -359,9 +355,9 @@ scoreLine :: String -> JoinList Score String
 Example: 
 \begin{code}
 *JoinList> scoreLine "yay " +++ scoreLine "haskell!"
-Append (Score {getScore = 23}) 
-       (Single (Score {getScore = 9}) "yay ") 
-       (Single (Score {getScore = 14}) "haskell!")
+Append (Score 23) 
+       (Single (Score 9) "yay ") 
+       (Single (Score 14) "haskell!")
 \end{code}
 
 \exercise Finally, combine these two kinds of annotations. A pair of
@@ -376,19 +372,19 @@ join-lists can track more than one type of annotation at once, in
 parallel, simply by using a pair type.
 
 Since we want to track both the size and score of a buffer, you should
-provide a |Buffer| instance for the type |JoinList (Score, Size)
-String|. (Note that you will have to enable the |FlexibleInstances|
-and |TypeSynonymInstances| extensions.)  Due to the use of the |Sized|
-type class, this type will continue to work with your functions such
-as |indexJ|.
+provide a |Buffer| instance for the type 
+\marginnote{Note that you will
+  have to enable the |FlexibleInstances| and |TypeSynonymInstances|
+  extensions.}\[ |JoinList (Score, Size) String|. \] Due to the use of the |Sized| type class, this type
+will continue to work with your functions such as |indexJ|.
 
 Finally, make a |main| function to run the editor interface using your
 join-list backend in place of the slow |String| backend (see
 |StringBufEditor.hs| for an example of how to do this). You should
 create an initial buffer of type |JoinList (Score, Size) String| and
 pass it as the second argument to |runEditor|.  Verify that the editor
-demonstration described in Section~\ref{sec:edbuf} does not exhibit
-delays when showing the prompt.
+demonstration described in the section ``\nameref{sec:edbuf}'' does not
+exhibit delays when showing the prompt.
 
 \end{document}
 
