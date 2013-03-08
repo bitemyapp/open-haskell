@@ -382,7 +382,7 @@ Finally, make a |main| function to run the editor interface using your
 join-list backend in place of the slow |String| backend (see
 |StringBufEditor.hs| for an example of how to do this). You should
 create an initial buffer of type |JoinList (Score, Size) String| and
-pass it as the second argument to |runEditor|.  Verify that the editor
+pass it as an argument to |runEditor editor|.  Verify that the editor
 demonstration described in the section ``\nameref{sec:edbuf}'' does not
 exhibit delays when showing the prompt.
 
