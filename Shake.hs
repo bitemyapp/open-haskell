@@ -109,7 +109,7 @@ requireBuild = do
     let imgDir = "weeks" </> week </> "images"
     exists <- doesFileExist imgDir
     when exists $ do
-      imgFiles <- getDirectoryFiles imgDir "*"
+      imgFiles <- getDirectoryFiles imgDir ["*"]
       mapM_ (\f -> copyFile' (imgDir </> f) ("web/images" </> f)) imgFiles
   mkWeek week = do
     extras      <- getExtras week
@@ -163,7 +163,7 @@ genericRules = do
       let sty = dir </> pkg <.> "sty"
       e <- doesFileExist sty
       when e $ need [sty]
-    hs <- getDirectoryFiles dir "*.hs"
+    hs <- getDirectoryFiles dir ["*.hs"]
     need (map (dir </>) hs)
 
     let tex' = takeFileName tex
