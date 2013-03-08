@@ -1,16 +1,16 @@
 {-# LANGUAGE DeriveDataTypeable #-}
 
-import Control.Monad          ( replicateM_, forM_, when )
-import Data.Functor           ( (<$>) )
-import Data.List              ( isPrefixOf, find )
-import Data.Monoid            ( (<>) )
+import           Control.Monad              (forM_, replicateM_, when)
+import           Data.Functor               ((<$>))
+import           Data.List                  (find, isPrefixOf)
+import           Data.Monoid                ((<>))
 
-import Development.Shake
-import Development.Shake.FilePath
+import           Development.Shake
+import           Development.Shake.FilePath
 
-import System.Cmd             ( system )
-import System.Console.CmdArgs
-import System.Directory       ( doesDirectoryExist )
+import           System.Cmd                 (system)
+import           System.Console.CmdArgs
+import           System.Directory           (doesDirectoryExist)
 
 data CIS194Mode =
     Build
