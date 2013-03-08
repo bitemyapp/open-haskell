@@ -10,7 +10,7 @@ IO
 ====
 
 CIS 194 Week 8  
-1 March 2012
+11 March 2013
 
 Suggested reading:
 
@@ -230,7 +230,7 @@ primary things:
 1. Functions may not have any external effects. For example, a
    function may not print anything on the screen.  Functions may
    only compute their outputs.
-   
+
 2. Functions may not depend on external stuff.  For example, they may
    not read from the keyboard, or filesystem, or network.  Functions
    may depend only on their inputs---put another way, functions should
