@@ -17,6 +17,7 @@ Suggested reading:
   * [LYAH Chapter 9: Input and Output](http://learnyouahaskell.com/input-and-output)
   * [RWH Chapter 7: I/O](http://book.realworldhaskell.org/read/io.html)
 
+ <!--
 First, finishing up a few things from last week:
 
 Type synonyms and newtypes
@@ -220,6 +221,8 @@ unFoo :: Foo -> Int
 ~~~~
 
 Now, onwards to `IO`!
+
+-->
 
 The problem with purity
 -----------------------
