@@ -8,18 +8,20 @@
 --
 -- See http://johnmacfarlane.net/pandoc/scripting.html
 
-import System.Console.CmdArgs
+import           System.Console.CmdArgs hiding (def)
 
-import Text.Pandoc hiding (Target)
-import Data.List (isPrefixOf)
-import Text.Printf
-import Data.Time
+import           Data.Default
+import           Data.List              (isPrefixOf)
+import qualified Data.Set               as S
+import           Data.Time
+import           Text.Pandoc            hiding (Target, def)
+import           Text.Printf
 
-import Data.Maybe
-import Control.Applicative ((<$>))
-import Control.Monad.Supply
+import           Control.Applicative    ((<$>))
+import           Control.Monad.Supply
+import           Data.Maybe
 
-import Data.Char
+import           Data.Char
 
 ------------------------------------------------------------
 -- Command-line arguments.
@@ -118,15 +120,17 @@ env' e optArg body = "\\begin{" ++ e ++ "}" ++ arg ++ "\n" ++ body ++ "\\end{" +
 ------------------------------------------------------------
 
 readLHS :: String -> Pandoc
-readLHS = readMarkdown defaultParserState { stateLiterateHaskell = True
-                                          , stateSmart           = True
-                                          }
+readLHS = readMarkdown
+            def { readerExtensions
+                    = Ext_literate_haskell `S.insert` readerExtensions def
+                , readerSmart      = True
+                }
 
 writeLHS :: Pandoc -> String
-writeLHS = writeMarkdown defaultWriterOptions { writerLiterateHaskell = True }
+writeLHS = writeMarkdown def
 
 writeHTML :: Pandoc -> String
-writeHTML = writeHtmlString defaultWriterOptions { writerLiterateHaskell = True }
+writeHTML = writeHtmlString def
 
 ------------------------------------------------------------
 -- Main

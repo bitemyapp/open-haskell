@@ -9,7 +9,7 @@
 
 \title{CIS 194: Homework 8}
 \date{}
-\author{Due Thursday, March 15}
+\author{Due Monday, March 18}
 \maketitle
 
 \begin{itemize}
@@ -92,10 +92,10 @@ add the new |Employee| and add their fun score without doing any kind
 of checks.
 \item A |Monoid| instance for |GuestList|. (How is the |Monoid|
   instance supposed to work, you ask?  You figure it out!)
-\item An |Ord| instance for |GuestList| which compares two
-  |GuestList|s by looking only at their |Fun| scores. (One |GuestList|
-  is better than another if the guests will have more fun.)
-  Remember that you need to define either |compare| or |(<=)|.
+\item A function |moreFun :: GuestList -> GuestList -> GuestList|
+  which takes two |GuestList|s and returns whichever one of them is
+  more fun, \ie\ has the higher fun score.  (If the scores are equal
+  it does not matter which is returned.)
 \end{enumerate}
 
 \exercise
