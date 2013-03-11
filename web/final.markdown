@@ -29,10 +29,6 @@ Note, however, that projects for groups of three will be held to
 somewhat higher standards than those for individuals or pairs.  Groups
 of five are *right out*.
 
-*More information coming soon!*
-
-<!--
-
 There are two types of projects you may complete:
 
 1. Application/library
@@ -41,19 +37,31 @@ There are two types of projects you may complete:
     library which does something fun/useful/interesting.  Your
     imagination is the limit.  Some possibilities/suggestions include:
 
-    + A program to play a game (like tic-tac-toe or Connect 4) against
-      the user.
-      
+    + A program to play a game (like tic-tac-toe, Connect 4, othello,
+      gomoku, poker, mancala, ...) against the user.
+	  
+	+ solve puzzles like sudoku
+
     + A program to generate random mazes and let the user
-      interactively solve them.
-      
+      interactively solve them, or to solve mazes input by the user.
+
     + An implementation of some interesting data structure like
-      red-black trees, 2-3-4 trees, or Fibonacci heaps.
-      
+      red-black trees, 2-3-4 trees, binomial heaps, or Fibonacci heaps.
+
+    + web server
+	
+	+ web page using hakyll
+	
+	+ translate a program from another class
+	
+	+ interpreter for a small PL
+	
+	+ raytracer
+
     + Whatever else your creativity suggests!
 
 2. Open-source contribution
- 
+
     For your project you may choose an open-source library or
     application on [Hackage](http://haskell.org/hackage/) to
     contribute to.  Contributions may include bug fixes, new features,
@@ -65,13 +73,19 @@ There are two types of projects you may complete:
     contributing to one of these projects, you should contact the
     relevant person and discuss it with them prior to submitting your
     project proposal.
+	
+	Open-source projects students have contributed to in prior years
+	include a package to efficiently compute prime numbers using a
+	mutable-array-based sieve; 
 
--->
 
 Project proposal
 ----------------
 
-You must submit a project proposal by **Monday, March 18**.  This
+You must submit a project proposal by **Monday, March 18** (unless you
+are thinking about working on an open-source contribution, in which
+case you have until **Monday, March 25** in order to have time to
+communicate with This
 gives us a chance to discuss your proposal and ensure it will make a
 suitable project.  You are encouraged to submit your proposal earlier
 than March 18 if you already have an idea.  You should also feel
@@ -125,7 +139,7 @@ written, along with a document describing your project (a simple text
 file is fine).  The document should contain
 
   * a description of your project and what you accomplished;
-  
+
   * instructions on how to compile/run/try out/play with your project;
 
   * a description of work you did and things you learned along the way.
@@ -134,13 +148,13 @@ Grading will be as follows:
 
   * Style (25%).  Your project should use good Haskell style and be
     well-documented.
-    
+
   * Correctness (25%).  Your project should be free of compilation
     errors and should correctly accomplish whatever it is supposed to
     accomplish.  This means that if the deadline is looming, your time
     would be better spent fixing bugs in what you already have than
     adding one last feature.
-    
+
   * Effort/accomplishment (50%).  We will be looking for evidence that
     you put energy and effort (~10 hours at a minimum) into your
     project and that you have learned something.  This is where the
