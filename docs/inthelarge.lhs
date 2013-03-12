@@ -122,7 +122,7 @@ For example,
 import Data.List (groupBy)
 \end{verbatim}
 means that you are only going to use the \texttt{groupBy} function from
-\texttt{Data.List}.  This useful to help document and keep track
+\texttt{Data.List}.  This is useful to help document and keep track
 of what you are actually using from each module, and also sometimes to
 help prevent name clashes---see below.
 
