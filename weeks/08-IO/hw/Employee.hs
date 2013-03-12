@@ -1,6 +1,6 @@
 module Employee where
 
-import Data.Tree
+import           Data.Tree
 
 -- Employee names are represented by Strings.
 type Name = String
@@ -15,7 +15,7 @@ data Employee = Emp { empName :: Name, empFun :: Fun }
 
 -- A small company hierarchy to use for testing purposes.
 testCompany :: Tree Employee
-testCompany 
+testCompany
   = Node (Emp "Stan" 9)
     [ Node (Emp "Bob" 2)
       [ Node (Emp "Joe" 5)
@@ -28,3 +28,7 @@ testCompany
       [ Node (Emp "Sam" 4) []
       ]
     ]
+
+-- A type to store a list of guests and their total fun score.
+data GuestList = GL [Employee] Fun
+  deriving (Show, Eq)
