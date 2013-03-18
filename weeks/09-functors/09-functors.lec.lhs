@@ -11,7 +11,7 @@ Functors
 ========
 
 CIS 194 Week 9  
-15 March 2012
+18 March 2013
 
 Suggested reading:
 
@@ -103,8 +103,8 @@ example, `Tree`, or the list type constructor, written `[]`.
 What about type constructors with other kinds?  How about `JoinList`
 from Homework 7?
 
-> data JoinList m a = Empty 
->                   | Single m a 
+> data JoinList m a = Empty
+>                   | Single m a
 >                   | Append m (JoinList m a) (JoinList m a)
 
     Prelude> :k JoinList
@@ -116,14 +116,10 @@ think of it as taking *one* type and giving back something of kind `*
 -> *`.)  Here's another one:
 
     Prelude> :k (->)
-    (->) :: ?? -> ? -> *
+    (->) :: * -> * -> *
 
-What's going on here?  Actually, `??` and `?` are special kinds that
-GHC uses internally, and you don't need to worry about them: they are
-basically the same as `*`.  (In fact, starting with version 7.4.1, GHC
-displays it as `* -> * -> *` instead of `?? -> ? -> *`.) So this tells
-us that the function type constructor takes two type arguments.  Like
-any operator, we use it infix:
+Tthis tells us that the function type constructor takes two type
+arguments.  Like any operator, we use it infix:
 
     Prelude> :k Int -> Char
     Int -> Char :: *
@@ -140,13 +136,13 @@ OK, what about this one?
     Prelude> :k Funny
     Funny :: (* -> *) -> * -> *
 
-`Funny` takes two arguments, the first one a type *constructor* of
-kind `* -> *`, and the second a type of kind `*`, and constructs a
-type.  (How did GHCi know what the kind of `Funny` is?  Well, it does
-*kind inference* just like it also does *type inference*.)  `Funny` is
-a *higher-order* type constructor, in the same way that `map` is a
-*higher-order* function.  Note that type constructors can be partially
-applied, too, just like functions:
+`Funny` takes two arguments, the first one a type of kind `* -> *`,
+and the second a type of kind `*`, and constructs a type.  (How did
+GHCi know what the kind of `Funny` is?  Well, it does *kind inference*
+just like it also does *type inference*.)  `Funny` is a *higher-order*
+type constructor, in the same way that `map` is a *higher-order*
+function.  Note that types can be partially applied, too,
+just like functions:
 
     Prelude> :k Funny Maybe
     Funny Maybe :: * -> *
@@ -183,7 +179,7 @@ The solution is to make a type class, which is traditionally called
 "functor" comes from category theory, and is *not* the same thing as
 functors in C++ (which are essentially first-class functions).)  Now
 we can just implement this class in a way specific to each particular
-`f`.  Note that the `Functor` class abstracts over *type constructors*
+`f`.  Note that the `Functor` class abstracts over types
 of kind `* -> *`.  So it would make no sense to write
 
 ~~~~ {.haskell}
@@ -193,9 +189,9 @@ instance Functor Int where
 
 Indeed, if we try, we get a very nice *kind mismatch error*:
 
-    [1 of 1] Compiling Main             ( 2012-03-15.lhs, interpreted )
+    [1 of 1] Compiling Main             ( 09-functors.lhs, interpreted )
 
-    2010-10-25.lhs:145:19:
+    09-functors.lhs:145:19:
         Kind mis-match
         The first argument of `Functor' should have kind `* -> *',
         but `Int' has kind `*'
@@ -231,7 +227,7 @@ without too much trouble:
 instance Functor IO where
   fmap f ioa = ioa >>= (\a -> return (f a))
 ~~~~
-	  
+
 or even
 
 > instance Functor IO where
@@ -243,7 +239,7 @@ A parting challenge for you: can you implement
 instance Functor ((->) e) where
   ...
 ~~~~
-	  
+
 ?
 
  <!--
