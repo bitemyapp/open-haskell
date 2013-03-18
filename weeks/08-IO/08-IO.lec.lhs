@@ -127,8 +127,8 @@ get the `String` out of an `IO String`"?  Given the above intuition,
 it should be clear that these are nonsensical questions: a value of
 type `IO String` is a description of some computation, a *recipe*, for
 generating a `String`.  There is no `String` "inside" an `IO String`,
-any more than there is chicken "inside" a chicken recipe.  To produce a
-`String` (or some delicious chicken) requires actually *executing* the
+any more than there is a cake "inside" a cake recipe.  To produce a
+`String` (or a delicious cake) requires actually *executing* the
 computation (or recipe).  And the only way to do that is to give it
 (perhaps as part of some larger `IO` value) to the Haskell runtime
 system, via `main`.
