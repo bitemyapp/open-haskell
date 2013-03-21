@@ -128,7 +128,24 @@ Aside: Levels of Abstraction
 ----------------------------
 
 `Functor` is a nifty tool but relatively straightforward.  At first
-glance it seems like `Applicative` doesn't add that much
+glance it seems like `Applicative` doesn't add that much beyond what
+`Functor` already provides, but it turns out that it's a small
+addition with a huge impact.  XXX Applicative deserves to be called a
+"model of computation", while Functor doesn't.
+
+XXX thinking on multiple levels.  Coding Applicative instances: we've
+already seen.  Very different is coding *on top of* the Applicative
+API.  Don't have to think about implementation details.  We're going
+to look at that now.  Very important to intentionally think about
+which level you're on.  Easy to inadvertently mix levels.  Last week's
+HW was implementing instance of Applicative.  This week's will be
+*using* it.
+
+Coding to the Applicative API
+-------------------
+
+XXX what should go here?  More reminders about f <$> foo <*> bar
+pattern.... ?
 
  <!--
 
