@@ -233,20 +233,36 @@ or even
 > instance Functor IO where
 >   fmap f ioa = ioa >>= (return . f)
 
-A parting challenge for you: can you implement
+Now let's try something a bit more mind-twisting:
 
-~~~~ {.haskell}
-instance Functor ((->) e) where
-  ...
-~~~~
+> instance Functor ((->) e) where
 
-?
+What!? Well, let's follow the types: if `f = (->) e` then we want
+
+> fmap :: (a -> b) -> (->) e a -> (->) e b
+
+or, with `(->)` written infix:
+
+> fmap :: (a -> b) -> (e -> a) -> (e -> b)
+
+Hmm, this type signature seems familiar...
+
+> instance Functor ((->) e) where
+>   fmap = (.)
+
+Crazy!  What does this mean?  Well, one way to think of a value of
+type `(e -> a)` is as a "`e`-indexed container" with one value of `a`
+for each value of `e`.  To map a function over every value in such a
+container corresponds exactly to function composition: to pick an
+element out of the transformed container, we first we apply the `(e ->
+a)` function to pick out an `a` from the original container, and then
+apply the `(a -> b)` function to transform the element we picked.
 
  <!--
 
 Local Variables:
 mode:markdown
-compile-command:"make explec"
+compile-command:"mk pre"
 End:
 
 -->
