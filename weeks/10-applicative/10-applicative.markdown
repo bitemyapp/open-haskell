@@ -1,7 +1,7 @@
 ---
 week: 10
 date: 25 March
-topic: Applicative functors
+topic: Applicative functors (part 1)
 name: 09-applicative
 due: Monday, 1 April
 ---
