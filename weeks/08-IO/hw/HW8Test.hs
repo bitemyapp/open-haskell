@@ -1,4 +1,4 @@
-
+{-# OPTIONS_GHC -fno-warn-orphans #-}
 
 module HW8Test where
 
@@ -24,7 +24,7 @@ tests = [
             testProperty "monoid fun" propMonoidFun,
             testProperty "ord fun" propOrdFun
           ],
-          
+
           testCase "treeFold" testSumFun,
 
           testCase "nextLevel" testNextLevel,
@@ -45,9 +45,9 @@ gl0 :: GuestList
 gl0 = mempty
 
 gl1 :: GuestList
-gl1 = e1 `glCons` 
-      (e2 `glCons` 
-      (e3 `glCons` 
+gl1 = e1 `glCons`
+      (e2 `glCons`
+      (e3 `glCons`
       (e4 `glCons` gl0)))
 
 gl2 :: GuestList
@@ -57,10 +57,14 @@ gl3 :: GuestList
 gl3 = e3 `glCons` (e4 `glCons` gl0)
 
 instance Arbitrary Employee where
-  arbitrary = liftM2 Emp arbitrary arbitrary
+  arbitrary = liftM2 Emp arbitrary (liftM abs arbitrary)
 
 instance Arbitrary GuestList where
-  arbitrary = liftM2 glDataCons arbitrary arbitrary
+  arbitrary = liftM2 glCons arbitrary gl where
+    gl = frequency [(4, arbitrary), (1, return $ GL [] 0)]
+
+glGetFun :: GuestList -> Fun
+glGetFun (GL _ f) = f
 
 -- Exercise 1
 
@@ -76,7 +80,7 @@ propMonoidFun (a, b) = glGetFun a + glGetFun b ==
   glGetFun (a Data.Monoid.<> b)
 
 propOrdFun :: (GuestList,GuestList) -> Bool
-propOrdFun (a,b) = 
+propOrdFun (a,b) =
   (a <= b) == ((glGetFun a) <= (glGetFun b))
 
 -- Exercise 2
@@ -94,6 +98,8 @@ testNextLevel = yes == 20 && no == 10 @=? True where
   yes = glGetFun glYes
   no = glGetFun glNo
   (glYes, glNo) = nextLevel e1 [(gl2,gl3)]
+
+-- Exercise 4
 
 testMaxFun :: Assertion
 testMaxFun = (glGetFun.maxFun $ testCompany) @=? 26
