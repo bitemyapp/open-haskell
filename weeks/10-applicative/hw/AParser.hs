@@ -54,18 +54,72 @@ posInt = Parser f
       | otherwise = Just (read ns, rest)
       where (ns, rest) = span isDigit xs
 
+eof :: Parser ()
+eof = Parser f
+  where f [] = Just ((), [])
+        f _  = Nothing
+
 ------------------------------------------------------------
 --  Exercise #1: Functor instance for Parser
 ------------------------------------------------------------
 
+inParser f = Parser . f . runParser
+
+first :: (a -> b) -> (a,c) -> (b,c)
+first f (x,y) = (f x, y)
+
+instance Functor Parser where
+
+  -- How we might expect you to write it:
+  fmap f (Parser p) = Parser (\s -> fmap (first f) (p s))
+
+  -- or perhaps:
+
+  -- fmap f (Parser p) = Parser (fmap (first f) . p)
+
+  -- An alternative definition using a Semantic Editor Combinator
+  -- style, see
+  -- http://conal.net/blog/posts/semantic-editor-combinators:
+
+  -- fmap = inParser . fmap . fmap . first
 
 ------------------------------------------------------------
 --  Exercise #2: Applicative instance for Parser
 ------------------------------------------------------------
 
+instance Applicative Parser where
+  -- a -> Parser a
+  pure a = Parser (\s -> Just (a, s))
+  -- Parser (p1 -> p2) -> Parser p1 -> Parser p2
+  (Parser fp) <*> xp = Parser $ \s ->
+    case fp s of
+      Nothing     -> Nothing
+      Just (f,s') -> runParser (fmap f xp) s'
 
 ------------------------------------------------------------
 --  Exercise #3: Alternative instance for Parser
 ------------------------------------------------------------
 
+instance Alternative Parser where
+  empty     = Parser (const Nothing)
+  Parser p1 <|> Parser p2 = Parser $ \s -> p1 s <|> p2 s
 
+------------------------------------------------------------
+--  Exercise #4: Parsing repetitions
+------------------------------------------------------------
+
+zeroOrMore :: Parser a -> Parser [a]
+zeroOrMore p = oneOrMore p <|> pure []
+
+oneOrMore :: Parser a -> Parser [a]
+oneOrMore p = (:) <$> p <*> zeroOrMore p
+
+------------------------------------------------------------
+--  Exercise #5: Utilities
+------------------------------------------------------------
+
+spaces :: Parser String
+spaces = zeroOrMore (satisfy isSpace)
+
+ident :: Parser String
+ident = (:) <$> satisfy isAlpha <*> zeroOrMore (satisfy isAlphaNum)
