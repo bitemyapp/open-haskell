@@ -1,12 +1,13 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-import           Control.Arrow (arr, (>>>), (>>^))
-import           Data.Functor  ((<$>))
-import           Data.List     (intercalate)
-import           Data.Maybe    (fromMaybe)
+import           Control.Arrow   (arr, (>>>), (>>^))
+import           Data.Functor    ((<$>))
+import           Data.List       (intercalate)
+import           Data.Maybe      (fromMaybe)
 import           Data.Time
-import           Safe          (readMay)
-import           System.Locale (defaultTimeLocale)
+import           Safe            (readMay)
+import           System.FilePath (takeFileName)
+import           System.Locale   (defaultTimeLocale)
 
 import           Hakyll
 
@@ -103,7 +104,7 @@ compileExtras p = setField "extra" extras p
       case getFieldMaybe "extras" p of
         Nothing -> ""
         Just es -> "[ " ++ (intercalate ", " . map linkify . words $ es) ++ " ]"
-    linkify e = "[" ++ e ++ "](extras/" ++ name ++ "/" ++ e ++ ")"
+    linkify e = "[" ++ e ++ "](extras/" ++ takeFileName name ++ "/" ++ e ++ ")"
 
 getCurrentDate :: IO (Integer,Int,Int)
 getCurrentDate = do

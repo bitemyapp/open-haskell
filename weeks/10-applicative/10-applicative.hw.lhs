@@ -118,8 +118,7 @@ Now implement an |Applicative| instance for |Parser|:
   succeeds if both |p1| and |p2| succeed).
 \end{itemize}
 
-So what is this good for?  Recalling the |Employee| example from
-class,
+So what is this good for? Recalling the |Employee| example from class,
 \begin{spec}
 type Name = String
 data Employee = Emp { name :: Name, phone :: String }
@@ -142,19 +141,58 @@ each other in the input, with no intervening separators.  We'll see
 later how to make parsers that can throw away extra stuff that doesn't
 directly correspond to information you want to parse.
 
-You can also test your |Applicative| instance using other simple
-applications of functions to multiple parsers:
+\exercise
+
+We can also test your |Applicative| instance using other simple
+applications of functions to multiple parsers.  You should implement
+each of the following exercises using the |Applicative| interface to
+put together simpler parsers into more complex ones.  Do \emph{not}
+implement them using the low-level definition of a |Parser|!  In other
+words, pretend that you do not have access to the |Parser| constructor
+or even know how the |Parser| type is defined.
+
+\begin{itemize}
+\item Create a parser
+  \begin{spec}
+abParser :: Parser (Char, Char)
+  \end{spec}
+
+  which expects to see the characters |'a'| and |'b'| and returns them
+  as a pair.  That is,
 
 \begin{verbatim}
-*Parser> runParser ((,) <$> char 'a' <*> char 'b') "abc"
-Just (('a','b'),"c")
-*Parser> runParser ((\x _ y -> x + y)
-                      <$> posInt <*> char ' ' <*> posInt) "12 34"
-Just (46,"")
+*AParser> runParser abParser "abcdef"
+Just (('a','b'),"cdef")
+*AParser> runParser abParser "aebcdf"
+Nothing
 \end{verbatim}
 
-Note: it's worth spending some time to make sure you understand how
-the above examples work before moving on!
+\item Now create a parser 
+
+  \begin{spec}
+abParser_ :: Parser ()
+  \end{spec}
+
+which acts in the same way as |abParser| but returns |()| instead of
+the characters |'a'| and |'b'|.
+
+\begin{verbatim}
+*AParser> runParser abParser "abcdef"
+Just ((),"cdef")
+*AParser> runParser abParser "aebcdf"
+Nothing
+\end{verbatim}
+
+\item Create a parser |intPair| which reads two integer values
+  separated by a space and returns the integer values in a list.  You
+  should use the provided |posInt| to parse the integer values.
+
+\begin{verbatim}
+*Parser> runParser intPair "12 34"
+Just ([12,34],"")
+\end{verbatim}
+
+\end{itemize}
 
 \exercise
 
@@ -185,7 +223,26 @@ Write an |Alternative| instance for |Parser|:
 \emph{Hint}: there is already an |Alternative| instance for |Maybe|
 which you may find useful.
 
-XXX need to add something else here... but what?
+\exercise
+
+Implement a parser
+\begin{spec}
+intOrUppercase :: Parser ()
+\end{spec}
+which parses either an integer value or an uppercase character, and
+fails otherwise.
+
+\begin{verbatim}
+*Parser> runParser intOrUppercase "342abcd"
+Just ((), "abcd")
+*Parser> runParser intOrUppercase "XYZ"
+Just ((), "YZ")
+*Parser> runParser intOrUppercase "foo"
+Nothing
+\end{verbatim}
+
+Next week, we will use your parsing framework to build a more
+sophisticated parser for a small programming language!
 
 \end{document}
 

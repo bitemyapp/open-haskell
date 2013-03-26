@@ -11,6 +11,7 @@ import           Development.Shake.FilePath
 import           System.Cmd                 (system)
 import           System.Console.CmdArgs
 import           System.Directory           (doesDirectoryExist)
+import           System.FilePath            (takeFileName)
 
 data CIS194Mode =
     Build
@@ -87,6 +88,11 @@ webRules = do
 
   "web/extras//*" *> \out -> do
     let (week,f) = splitFileName . dropDirectory1 . dropDirectory1 $ out
+        loc = "weeks" </> week </> "hw" </> f
+    e <- doesFileExist loc
+    let loc' = case e of
+                 True -> loc
+                 False -> "weeks" </> week </> "hw" </> "skel" </> f
     copyFile' ("weeks" </> week </> "hw" </> f) out
 
 weekRules :: Rules ()
@@ -129,7 +135,7 @@ requireBuild = do
       , "web/hw" </> week <.> "pdf"
       ]
       ++
-      map ("web/extras" </> week </>) extras
+      map (("web/extras" </> week </>) . takeFileName) extras
 
 weekFile :: FilePath -> String -> String -> FilePath
 weekFile week tag ext = "weeks" </> week </> (week <.> tag) <.> ext

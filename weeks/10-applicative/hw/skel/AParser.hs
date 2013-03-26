@@ -4,9 +4,9 @@
 
 module AParser where
 
-import Control.Applicative
+import           Control.Applicative
 
-import Data.Char
+import           Data.Char
 
 -- A parser for a value of type a is a function which takes a String
 -- represnting the input to be parsed, and succeeds or fails; if it
@@ -55,17 +55,5 @@ posInt = Parser f
       where (ns, rest) = span isDigit xs
 
 ------------------------------------------------------------
---  Exercise #1: Functor instance for Parser
+-- Your code goes below here
 ------------------------------------------------------------
-
-
-------------------------------------------------------------
---  Exercise #2: Applicative instance for Parser
-------------------------------------------------------------
-
-
-------------------------------------------------------------
---  Exercise #3: Alternative instance for Parser
-------------------------------------------------------------
-
-
