@@ -1,5 +1,9 @@
 
+ <!-- CLASS
+
 > {-# LANGUAGE GeneralizedNewtypeDeriving, NoMonomorphismRestriction #-}
+
+-->
 
 Applicative functors, Part I
 ============================
