@@ -88,12 +88,12 @@ webRules = do
 
   "web/extras//*" *> \out -> do
     let (week,f) = splitFileName . dropDirectory1 . dropDirectory1 $ out
-        loc = "weeks" </> week </> "hw" </> f
+        loc = "weeks" </> week </> "hw" </> "skel" </> f
     e <- doesFileExist loc
     let loc' = case e of
                  True -> loc
-                 False -> "weeks" </> week </> "hw" </> "skel" </> f
-    copyFile' ("weeks" </> week </> "hw" </> f) out
+                 False -> "weeks" </> week </> "hw" </> f
+    copyFile' loc' out
 
 weekRules :: Rules ()
 weekRules = do
