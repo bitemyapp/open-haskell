@@ -104,7 +104,8 @@ compileExtras p = setField "extra" extras p
       case getFieldMaybe "extras" p of
         Nothing -> ""
         Just es -> "[ " ++ (intercalate ", " . map linkify . words $ es) ++ " ]"
-    linkify e = "[" ++ e ++ "](extras/" ++ takeFileName name ++ "/" ++ e ++ ")"
+    linkify e = "[" ++ e' ++ "](extras/" ++ name ++ "/" ++ e' ++ ")"
+      where e' = takeFileName e
 
 getCurrentDate :: IO (Integer,Int,Int)
 getCurrentDate = do
