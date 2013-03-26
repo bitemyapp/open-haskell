@@ -11,12 +11,6 @@ import           Employee
 
 -- Exercise 1: Guest lists
 
-data GuestList = GL [Employee] Fun
-  deriving (Show, Eq)
-
-glGetFun :: GuestList -> Fun
-glGetFun (GL _ f) = f
-
 glDataCons :: [Employee] -> Fun -> GuestList
 glDataCons = GL
 
@@ -51,6 +45,7 @@ nextLevel = considerBoss
 
 maxFun :: Tree Employee -> GuestList
 maxFun = uncurry moreFun . treeFold considerBoss
+
 
 -- Exercise 5: reading in a larger tree.
 
