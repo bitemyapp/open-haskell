@@ -167,7 +167,7 @@ Just (('a','b'),"cdef")
 Nothing
 \end{verbatim}
 
-\item Now create a parser 
+\item Now create a parser
 
   \begin{spec}
 abParser_ :: Parser ()
@@ -177,9 +177,9 @@ which acts in the same way as |abParser| but returns |()| instead of
 the characters |'a'| and |'b'|.
 
 \begin{verbatim}
-*AParser> runParser abParser "abcdef"
+*AParser> runParser abParser_ "abcdef"
 Just ((),"cdef")
-*AParser> runParser abParser "aebcdf"
+*AParser> runParser abParser_ "aebcdf"
 Nothing
 \end{verbatim}
 
