@@ -1,4 +1,4 @@
-module AParser (Parser, satisfy, char, posInt) where
+module AParser (Parser, runParser, satisfy, char, posInt) where
 
 import           Control.Applicative
 import           Data.Char
