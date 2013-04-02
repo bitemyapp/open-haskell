@@ -236,19 +236,30 @@ Checkpoint
 ----------
 
 Sometime during the week of April 8-12 or thereabouts, you should
-schedule a meeting with one of Brent, Zach, or Adi to show off the
-progress you have made on your project, get any guidance or help you
-might need, and discuss your plans for completing the project.  Note
-that *the checkpoint meeting will constitute part of your final
-project grade*.  More information on how to schedule a meeting and
-exactly what is expected will be posted soon.
+[schedule a meeting](https://piazza.com/class#spring2013/cis194/96)
+with one of Brent, Zach, or Adi to show off the progress you have made
+on your project, get any guidance or help you might need, and discuss
+your plans for completing the project.  Note that *the checkpoint
+meeting will constitute part of your final project grade*, though
+there's no need to stress out about it.  Concretely, by the checkpoint
+you should:
+
+  * Have some code to show off and explain to us
+  * Have a few questions for us: things you are wondering about,
+      confused about, struggling with, *etc.*
+
+The purpose of the meetings is twofold: to make sure you get started
+on your project before the last minute, and to provide a convenient
+space for you to ask questions and get some direction and feedback.
 
 Final submission
 ----------------
 
 Final submissions are due by **Tuesday, April 23**.  Extensions to the
 final deadline will be cheerfully granted, but you *must ask for one
-by **Tuesday, April 16*** (one week in advance).
+by **Tuesday, April 16*** (one week in advance).  Simply choose your
+own deadline---up to and including the last day of finals, **May
+7**---and that will be your new deadline.
 
 Your final submission should consist of any and all code you have
 written, along with a document describing your project (a simple text
@@ -266,9 +277,9 @@ You may submit your project in one of two ways:
 
   * By emailing me a link to a publically accessible source
     repository, *e.g.* on github, bitbucket, or hub.darcs.net. Be sure
-    to submit a link to a specific commit, tag, *etc.* representing the
-    version that you would like to be graded, rather than just to the
-    repository in general.
+    to submit a link to one or more specific commits, tags, *etc.*
+    representing what you would like to be graded, rather than just to
+    the repository in general.
 
 Grading will be as follows:
 
