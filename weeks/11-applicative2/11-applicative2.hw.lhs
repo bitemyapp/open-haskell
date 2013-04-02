@@ -13,15 +13,16 @@
 
 \begin{itemize}
 \item Files you should submit: |SExpr.hs|.  You should take the
-  versions that we have provided and add your solutions to them.
+  version that we have provided and add your solutions.  Note that we
+  have also provided |AParser.hs|---you are welcome to use your own
+  |AParser.hs| from last week's homework or ours, whichever you
+  prefer.
 \end{itemize}
-
-XXX introduction here reminding to use AParser from last week
 
 \section{Parsing S-expressions}
 \label{sec:sexpr}
 
-At this point, what do we have?
+In |AParser.hs| from last week's homework, we now have the following:
 \begin{itemize}
 \item the definition of a basic |Parser| type
 \item a few primitive parsers such as |satisfy|, |char|, and |posInt|
@@ -30,14 +31,13 @@ At this point, what do we have?
 So, what can we do with this?  It may not seem like we have much to go
 on, but it turns out we can actually do quite a lot.
 
-From this point onward, you should be able to code everything directly
-in terms of the primitive parsers we started with, and the |Functor|,
-|Applicative| and |Alternative| interfaces you made for parsers.  You
-should \emph{not} have to spend any more time calling |runParser|,
-dealing with |Maybe|, and so on!  All those messy details are handled
-for you by the |Applicative| and |Alternative| instances.  You can now
-just concentrate on combining parsers at a higher level without
-worrying about the internal details of how they are implemented.
+\textbf{Remember}, for this week's homework you should only need to
+write code on top of the interface provided by the |Functor|,
+|Applicative|, and |Alternative| instances.  In particular, you should
+not write any code that depends on the details of the |Parser|
+implementation. (To help with this, the version of |AParser.hs| we
+provided this week does not even export the |Parser| constructor, so
+it is literally impossible to depend on the details!)
 
 \exercise
 
@@ -54,10 +54,11 @@ For example, below we use |zeroOrMore| and |oneOrMore| to parse a
 sequence of uppercase characters.  The longest possible sequence of
 uppercase characters is returned as a list.  In this case,
 |zeroOrMore| and |oneOrMore| behave identically:
+\newpage
 \begin{verbatim}
-*Parser> runParser (zeroOrMore (satisfy isUpper)) "ABCdEfgH"
+*AParser> runParser (zeroOrMore (satisfy isUpper)) "ABCdEfgH"
 Just ("ABC","dEfgH")
-*Parser> runParser (oneOrMore (satisfy isUpper)) "ABCdEfgH"
+*AParser> runParser (oneOrMore (satisfy isUpper)) "ABCdEfgH"
 Just ("ABC","dEfgH")
 \end{verbatim}
 
@@ -65,31 +66,31 @@ The difference between them can be seen when there is not an uppercase
 character at the beginning of the input.  |zeroOrMore| succeeds and
 returns the empty list without consuming any input; |oneOrMore| fails.
 \begin{verbatim}
-*Parser> runParser (zeroOrMore (satisfy isUpper)) "abcdeFGh"
+*AParser> runParser (zeroOrMore (satisfy isUpper)) "abcdeFGh"
 Just ("","abcdeFGh")
-*Parser> runParser (oneOrMore (satisfy isUpper)) "abcdeFGh"
+*AParser> runParser (oneOrMore (satisfy isUpper)) "abcdeFGh"
 Nothing
 \end{verbatim}
 
 Implement |zeroOrMore| and |oneOrMore| with the following type
 signatures:
 
+\marginnote{\emph{Hint}: To parse one or more occurrences of |p|, run |p| once and
+then parse zero or more occurrences of |p|.  To parse zero or more
+occurrences of |p|, try parsing one or more; if that fails, return the
+empty list.}
+
 \begin{spec}
 zeroOrMore :: Parser a -> Parser [a]
 oneOrMore  :: Parser a -> Parser [a]
 \end{spec}
-
-(\emph{Hint}: To parse one or more occurrences of |p|, run |p| once and
-then parse zero or more occurrences of |p|.  To parse zero or more
-occurrences of |p|, try parsing one or more; if that fails, return the
-empty list.  (That might sound circular, but it isn't!))
 
 \exercise
 
 There are a few more utility parsers needed before we can accomplish
 the final parsing task. First, |spaces| should parse a consecutive
 list of zero or more whitespace characters (use the |isSpace| function
-from |Data.Char|).
+from the standard |Data.Char| module).
 
 \begin{spec}
 spaces :: Parser String
@@ -99,7 +100,7 @@ Next, |ident| should parse an \emph{identifier}, which for our
 purposes will be an alphabetic character (use |isAlpha|) followed by
 zero or more alphanumeric characters (use |isAlphaNum|).  In other
 words, an identifier can be any nonempty sequence of letters and
-digits except that it may not start with a digit.
+digits, except that it may not start with a digit.
 
 \begin{spec}
 ident :: Parser String
@@ -108,13 +109,13 @@ ident :: Parser String
 For example:
 
 \begin{verbatim}
-*Parser> runParser ident "foobar baz"
+*AParser> runParser ident "foobar baz"
 Just ("foobar"," baz")
-*Parser> runParser ident "foo33fA"
+*AParser> runParser ident "foo33fA"
 Just ("foo33fA","")
-*Parser> runParser ident "2bad"
+*AParser> runParser ident "2bad"
 Nothing
-*Parser> runParser ident ""
+*AParser> runParser ident ""
 Nothing
 \end{verbatim}
 
@@ -195,7 +196,7 @@ result) instead.
 
 For example:
 \begin{verbatim}
-*Parser> runParser (spaces *> posInt) "     345"
+*AParser> runParser (spaces *> posInt) "     345"
 Just (345,"")
 \end{verbatim}
 

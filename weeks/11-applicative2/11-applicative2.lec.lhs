@@ -9,6 +9,13 @@ Suggested reading:
   * [Applicative Functors](http://learnyouahaskell.com/functors-applicative-functors-and-monoids#applicative-functors) from Learn You a Haskell
   * [The Typeclassopedia](http://www.haskell.org/haskellwiki/Typeclassopedia)
 
+ <!--
+XXX review Functor and Applicative.  Implement fmap in terms of
+Applicative methods.  Note equivalence is a law.
+-->
+
+*More coming soon!*
+
 More Applicative Examples
 -------------------------
 
@@ -61,7 +68,7 @@ sensible thing to do is to truncate the longer list to the length of
 the shorter, throwing away the extra elements.  Of course there are
 other possible answers: we might, for instance, extend the shorter
 list by copying the last element (but then what do we do when one of
-the lists is empty); or extend the shorter list with a "neutral"
+the lists is empty?); or extend the shorter list with a "neutral"
 element (but then we would have to require an instance of `Monoid`, or
 an extra "default" argument for the application).
 
@@ -130,22 +137,63 @@ Aside: Levels of Abstraction
 `Functor` is a nifty tool but relatively straightforward.  At first
 glance it seems like `Applicative` doesn't add that much beyond what
 `Functor` already provides, but it turns out that it's a small
-addition with a huge impact.  XXX Applicative deserves to be called a
-"model of computation", while Functor doesn't.
+addition with a huge impact.  `Applicative` (and as we will see next
+week, `Monad`) deserves to be called a "model of computation", while
+`Functor` doesn't.
 
-XXX thinking on multiple levels.  Coding Applicative instances: we've
-already seen.  Very different is coding *on top of* the Applicative
-API.  Don't have to think about implementation details.  We're going
-to look at that now.  Very important to intentionally think about
-which level you're on.  Easy to inadvertently mix levels.  Last week's
-HW was implementing instance of Applicative.  This week's will be
-*using* it.
+When working with things like `Applicative` and `Monad`, it's very
+important to keep in mind that there are *multiple levels of
+abstraction* involved.  Roughly speaking, an *abstraction* is
+something which *hides details* of a lower level, providing a
+"high-level" interface that can be used (ideally) without thinking
+about the lower level---although the details of the lower level often
+"leak through" in certain cases.  This idea of layers of abstraction
+is widespread. Think about user programs---OS---kernel---integrated
+circuits---gates---silicon, or HTTP---TCP---IP---Ethernet, or
+programming languages---bytecode---assembly---machine code.  As we
+have seen, Haskell gives us many nice tools for constructing multiple
+layers of abstraction *within Haskell programs themselves*, that is,
+we get to dynamically extend the "programming language" layer stack
+upwards.  This is a powerful facility but can lead to confusion.  One
+must learn to explicitly be able to think on multiple levels, and to
+switch between levels.
 
-Coding to the Applicative API
+With respect to `Applicative` and `Monad` in particular, there are
+just two levels to be concerned with.  The first is the level of
+implementing various `Applicative` and `Monad` instances, *i.e.* the
+"raw Haskell" level.  You gained some experience with this level in
+your previous homework, when you implemented an `Applicative` instance
+for `Parser`.
+
+Once we have an `Applicative` instance for a type like `Parser`, the
+point is that we get to "move up a layer" and program with `Parser`s
+*using the `Applicative` interface*, without thinking about the
+details of how `Parser` and its `Applicative` instance are actually
+implemented.  You got a little bit of experience with this on last
+week's homework, and will get a lot more of it this week. Programming
+at this level has a very different feel than actually implementing the
+instances.  Let's see some examples.
+
+*More coming soon.*
+
+ <!-- 
+
+The Applicative API
 -------------------
 
-XXX what should go here?  More reminders about f <$> foo <*> bar
-pattern.... ?
+Recall `f <$> foo <*> bar` pattern.  Go over examples from HW.
+
+Examples for each: `Maybe`, `[]`, `IO`, `(->) e`, `Parser`.
+
+In-class: implement `pair :: f a -> f b -> f (a,b)`.
+
+In-class: code `mapA :: (a -> f b) -> ([a] -> f [b])`.
+
+In-class: code `sequenceA :: [f a] -> f [a]`.  Do some examples.
+
+In-class: code `replicateA :: Int -> f a -> f [a]`.
+
+-->
 
  <!--
 
