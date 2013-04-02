@@ -9,12 +9,29 @@ Suggested reading:
   * [Applicative Functors](http://learnyouahaskell.com/functors-applicative-functors-and-monoids#applicative-functors) from Learn You a Haskell
   * [The Typeclassopedia](http://www.haskell.org/haskellwiki/Typeclassopedia)
 
- <!--
-XXX review Functor and Applicative.  Implement fmap in terms of
-Applicative methods.  Note equivalence is a law.
--->
+We begin with a review of the `Functor` and `Applicative` type
+classes:
 
-*More coming soon!*
+> class Functor f where
+>   fmap :: (a -> b) -> f a -> f b
+>
+> class Functor f => Applicative f where
+>   pure  :: a -> f a
+>   (<*>) :: f (a -> b) -> f a -> f b
+
+Every `Applicative` is also a `Functor`---so can we implement `fmap`
+in terms of `pure` and `(<*>)`?  Let's try!
+
+> fmap g x = pure g <*> x
+
+Well, that has the right type at least!  However, it's not hard to
+imagine making `Functor` and `Applicative` instances for some type
+such that this equality does not hold.  Since this would be a fairly
+dubious situation, we stipulate as a *law* that this equality must
+hold---this is a formal way of stating that the `Functor` and
+`Applicative` instances for a given type must "play nicely together".
+
+Now, let's see a few more examples of `Applicative` instances.
 
 More Applicative Examples
 -------------------------
@@ -35,9 +52,9 @@ nondeterministic function application---that is, the application of a
 nondeterministic function to a nondeterministic argument.
 
 > instance Applicative [] where
->   pure a = [a]          -- a "deterministic" value
+>   pure a        = [a]          -- a "deterministic" value
 >   [] <*> _      = []
->   (f:fs) <*> as = map f as ++ fs <*> as
+>   (f:fs) <*> as = (map f as) ++ (fs <*> as)
 
 Here's an example:
 
@@ -174,26 +191,60 @@ week's homework, and will get a lot more of it this week. Programming
 at this level has a very different feel than actually implementing the
 instances.  Let's see some examples.
 
-*More coming soon.*
-
- <!-- 
-
 The Applicative API
 -------------------
 
-Recall `f <$> foo <*> bar` pattern.  Go over examples from HW.
+One of the benefits of having a unified interface like `Applicative`
+is that we can write generic tools and control structures that work
+with *any* type which is an instance of `Applicative`.  As a first
+example, let's try writing
 
-Examples for each: `Maybe`, `[]`, `IO`, `(->) e`, `Parser`.
+> pair :: Applicative f => f a -> f b -> f (a,b)
 
-In-class: implement `pair :: f a -> f b -> f (a,b)`.
+`pair` takes two values and pairs them, but all in the context of some
+`Applicative f`.  As a first try we can take a function for pairing
+and "lift" it over the arguments using `(<$>)` and `(<*>)`:
 
-In-class: code `mapA :: (a -> f b) -> ([a] -> f [b])`.
+> pair fa fb = (\x y -> (x,y)) <$> fa <*> fb
 
-In-class: code `sequenceA :: [f a] -> f [a]`.  Do some examples.
+This works, though we can simplify it a bit.  First, note that Haskell
+allows the special syntax `(,)` to represent the pair constructor, so
+we can write
 
-In-class: code `replicateA :: Int -> f a -> f [a]`.
+> pair fa fb = (,) <$> fa <*> fb
 
--->
+But actually, we've seen this pattern before---this is the `liftA2`
+pattern which got us started down this whole `Applicative` road.  So
+we can further simplify to
+
+> pair fa fb = liftA2 (,) fa fb
+
+but now there is no need to explicitly write out the function
+arguments, so we reach our final simplified version:
+
+> pair = liftA2 (,)
+
+Now, what does this function do?  It depends, of course, on the
+particular `f` chosen.  Let's consider a number of particular
+examples:
+
+  * `f = Maybe`: the result is `Nothing` if either of the arguments
+    is; if both are `Just` the result is `Just` their pairing.
+  * `f = []`: `pair` computes the Cartesian product of two lists.
+  * `f = ZipList`: `pair` is the same as the standard `zip` function.
+  * `f = IO`: `pair` runs two `IO` actions in sequence, returning a
+    pair of their results.
+  * `f = Parser`: `pair` runs two parsers in sequence (the parsers
+    consume consecutive sections of the input), returning their
+    results as a pair.  If either parser fails, the whole thing fails.
+
+Can you implement the following functions?  Consider what each
+function does when `f` is replaced with each of the above types.
+
+> (*>)       :: Applicative f => f a -> f b -> f b
+> mapA       :: Applicative f => (a -> f b) -> ([a] -> f [b])
+> sequenceA  :: Applicative f => [f a] -> f [a]
+> replicateA :: Applicative f => Int -> f a -> f [a]
 
  <!--
 
