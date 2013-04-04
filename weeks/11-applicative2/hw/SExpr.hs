@@ -4,8 +4,9 @@
 
 module SExpr where
 
-import AParser
-import Control.Applicative
+import           AParser
+import           Control.Applicative
+import           Data.Char
 
 ------------------------------------------------------------
 --  1. Parsing repetitions
