@@ -14,7 +14,6 @@ import Test.QuickCheck
 import Test.HUnit
 
 import AParser
-import SExpr
 
 tests = [ testGroup "ex1/Functor"
           [ testCase "functor OK"   testFunctor1
@@ -25,48 +24,35 @@ tests = [ testGroup "ex1/Functor"
         , testGroup "ex2/Applicative"
           [ testCase "applicative OK" testApp1
           , testCase "applicative fail" testApp2
+          , testCase "applicative pure" testAppPure
           , testProperty "applicative rand" prop_applicative
           ]
-
-        , testGroup "ex3/Alternative"
+        , testGroup "ex3/Parsers"
+          [ testCase "testAbParser1" testAbParser1
+          , testCase "testAbParser2" testAbParser2
+          , testCase "testAbParser3" testAbParser3
+          , testCase "testAbParser4" testAbParser4
+          , testCase "testAbParser_1" testAbParser_1
+          , testCase "testAbParser_2" testAbParser_2
+          , testCase "testAbParser_3" testAbParser_3
+          , testCase "testAbParser_4" testAbParser_4
+          , testCase "testIntPair1" testIntPair1
+          , testCase "testIntPair2" testIntPair2
+          , testCase "testIntPair3" testIntPair3
+          , testCase "testIntPair4" testIntPair4
+          ]
+        , testGroup "ex4/Alternative"
           [ testCase "alternative1" testAlt1
           , testCase "alternative2" testAlt2
           , testCase "alternative3" testAlt3
           , testCase "alternative4" testAlt4
           , testCase "alternative5" testAlt5
           ]
-
-        , testGroup "ex4/repetition"
-          [ testCase "repZ1" testRepZ1
-          , testCase "repZ2" testRepZ2
-          , testCase "repZ3" testRepZ3
-          , testCase "repO1" testRepO1
-          , testCase "repO2" testRepO2
-          , testCase "repO3" testRepO3
-          , testCase "repE1" testRepE1
-          , testCase "repE2" testRepE2
-          , testCase "repE3" testRepE3
-          , testCase "repE4" testRepE4                     
-          ]
-
-        , testGroup "ex5/util"
-          [ testCase "spaces1" testSpaces1
-          , testCase "spaces2" testSpaces2
-
-          , testCase "testIdentE1" testIdentE1
-          , testCase "testIdentE2" testIdentE2
-          , testCase "testIdentE3" testIdentE3
-          , testCase "testIdentE4" testIdentE4
-
-          , testCase "testIdentSingle" testIdentSingle
-          ]
-
-        , testGroup "ex6/SExpr"
-          [ testCase "sexpr1" testSE1
-          , testCase "sexpr2" testSE2
-          , testCase "sexpr3" testSE3
-          , testCase "sexpr4" testSE4
-          , testCase "sexpr5" testSE5
+        , testGroup "ex5/intOrUppercase"
+          [ testCase "testIntOrUppercase1" testIntOrUppercase1
+          , testCase "testIntOrUppercase2" testIntOrUppercase2
+          , testCase "testIntOrUppercase3" testIntOrUppercase3
+          , testCase "testIntOrUppercase4" testIntOrUppercase4
           ]
         ]
 
@@ -86,12 +72,32 @@ p2 = ((+) <$> posInt <*> (char ' ' *> posInt))
 
 testApp1 = runParser p2 "345 678" @?= Just (1023, "")
 testApp2 = runParser p2 "345 b6" @?= Nothing
+testAppPure = runParser (pure 1) "test" @?= Just (1, "test")
 
 prop_applicative :: Blind (Integer -> Integer -> Integer) -> Positive Integer -> Positive Integer -> Bool
-prop_applicative (Blind f) (Positive m) (Positive n) = 
+prop_applicative (Blind f) (Positive m) (Positive n) =
   runParser (f <$> posInt <*> (char ' ' *> posInt)) (show m ++ " " ++ show n) == Just (f m n, "")
 
--- Exercise 3 / Alternative
+-- Exercise 3
+
+testAbParser1 = runParser abParser "abcdef" @?= Just (('a', 'b'), "cdef")
+testAbParser2 = runParser abParser "aebcdef" @?= Nothing
+testAbParser3 = runParser abParser "ab" @?= Just (('a', 'b'), "")
+testAbParser4 = runParser abParser " ab" @?= Nothing
+
+testAbParser_1 = runParser abParser_ "abcdef" @?= Just ((), "cdef")
+testAbParser_2 = runParser abParser_ "aebcdef" @?= Nothing
+testAbParser_3 = runParser abParser_ "ab" @?= Just ((), "")
+testAbParser_4 = runParser abParser_ " ab" @?= Nothing
+
+testIntPair1 = runParser intPair "12 34" @?= Just ([12, 34], "")
+testIntPair2 = runParser intPair "aebcdef" @?= Nothing
+testIntPair3 = runParser intPair "123 456seven" @?= Just ([123, 456], "seven")
+testIntPair4 = runParser intPair "1234" @?= Nothing
+
+
+
+-- Exercise 4 / Alternative
 
 p3 = posInt <|> pure 6
 p4 = char 'x' <|> char 'y'
@@ -102,80 +108,9 @@ testAlt3 = runParser p4 "x" @?= Just ('x', "")
 testAlt4 = runParser p4 "y" @?= Just ('y', "")
 testAlt5 = runParser p4 "z" @?= Nothing
 
--- Exercise 4 / zeroOrMore/oneOrMore
+-- Exercise 5
 
-testRepZ1 = runParser (zeroOrMore p4) "xyxxy" @?= Just ("xyxxy", "")
-testRepZ2 = runParser (zeroOrMore p4) "xyxxyzyyx" @?= Just ("xyxxy", "zyyx")
-testRepZ3 = runParser (zeroOrMore p4) "" @?= Just ("", "")
-testRepO1 = runParser (oneOrMore p4) "xyxxy" @?= Just ("xyxxy", "")
-testRepO2 = runParser (oneOrMore p4) "xyxxyzyyx" @?= Just ("xyxxy", "zyyx")
-testRepO3 = runParser (oneOrMore p4) "" @?= Nothing
-
-testRepE1 = runParser (zeroOrMore (satisfy isUpper)) "ABCdEfgH" 
-            @?= Just ("ABC","dEfgH")
-testRepE2 = runParser (oneOrMore (satisfy isUpper)) "ABCdEfgH"
-            @?= Just ("ABC","dEfgH")
-testRepE3 = runParser (zeroOrMore (satisfy isUpper)) "abcdeFGh"
-            @?= Just ("","abcdeFGh")
-testRepE4 = runParser (oneOrMore (satisfy isUpper)) "abcdeFGh"
-            @?= Nothing
-
--- Exercise 5 / util
-
-testSpaces1 = runParser spaces "   " @?= Just ("   ", "")
-testSpaces2 = runParser spaces sp @?= Just (sp, "")
-  where sp = "\n\t \t\r" 
-
-testIdentE1 = runParser ident "foobar baz"
-              @?= Just ("foobar"," baz")
-testIdentE2 = runParser ident "foo33fA"
-              @?= Just ("foo33fA","")
-testIdentE3 = runParser ident "2bad"
-              @?= Nothing
-testIdentE4 = runParser ident ""
-              @?= Nothing
-
-testIdentSingle = runParser ident "x"
-                  @?= Just ("x", "")
-
--- Exercise 6 / S-exprs
-
-deriving instance Eq Atom
-deriving instance Eq SExpr
-
-n = A . N
-i = A . I
-
-testSE1 = runParser parseSExpr "5" @?= Just (A (N 5), "")
-testSE2 = runParser parseSExpr "foo3" @?= Just (A (I "foo3"), "")
-testSE3 = runParser parseSExpr "(bar (foo) 3 5 874)"
-          @?= Just (Comb [i "bar", Comb [i "foo"], n 3, n 5, n 874], "")
-testSE4 = runParser parseSExpr "(((lambda x (lambda y (plus x y))) 3) 5)"
-          @?= Just (Comb 
-                    [ Comb
-                      [ Comb
-                        [ i "lambda"
-                        , i "x"
-                        , Comb
-                          [ i "lambda"
-                          , i "y"
-                          , Comb
-                            [ i "plus"
-                            , i "x"
-                            , i "y"
-                            ]
-                          ]
-                        ]
-                      , n 3
-                      ]
-                    , n 5
-                    ]
-                   , ""
-                   )
-testSE5 = runParser parseSExpr "(  lots of   ( spaces  in )  this ( one ) )"
-          @?= Just (Comb
-                    [ i "lots", i "of"
-                    , Comb [ i "spaces", i "in" ]
-                    , i "this"
-                    , Comb [ i "one" ]
-                    ], "")
+testIntOrUppercase1 = runParser intOrUppercase "342abcd" @?= Just ((), "abcd")
+testIntOrUppercase2 = runParser intOrUppercase "XYZ" @?= Just ((), "YZ")
+testIntOrUppercase3 = runParser intOrUppercase "foo" @?= Nothing
+testIntOrUppercase4 = runParser intOrUppercase "..." @?= Nothing

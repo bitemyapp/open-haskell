@@ -28,6 +28,7 @@ satisfy p = Parser f
         | p x       = Just (x, xs)
         | otherwise = Nothing  -- otherwise, fail
 
+
 -- Using satisfy, we can define the parser 'char c' which expects to
 -- see exactly the character c, and fails otherwise.
 char :: Char -> Parser Char
@@ -54,11 +55,32 @@ posInt = Parser f
       | otherwise = Just (read ns, rest)
       where (ns, rest) = span isDigit xs
 
+singleInt :: Parser Integer
+singleInt = Parser f
+  where
+    f [] = Nothing
+    f (x:xs)
+      | isDigit x = Just (read [x], xs)
+      | otherwise = Nothing
+    -- f xs
+    --   | null ns   = Nothing
+    --   | otherwise = Just (read (head xs), tail xs)
+    --   --   Just (read ns, rest)
+    --   -- where (ns:rest) = x:xs
+
+
 eof :: Parser ()
 eof = Parser f
   where f [] = Just ((), [])
         f _  = Nothing
 
+type Name = String
+data Employee = Emp { name :: Name, phone :: String }
+
+parseName :: Parser Name
+parseName = undefined
+parsePhone :: Parser String
+parsePhone = undefined
 ------------------------------------------------------------
 --  Exercise #1: Functor instance for Parser
 ------------------------------------------------------------
@@ -97,7 +119,19 @@ instance Applicative Parser where
       Just (f,s') -> runParser (fmap f xp) s'
 
 ------------------------------------------------------------
---  Exercise #3: Alternative instance for Parser
+--  Exercise #3: Implementing Parsers
+------------------------------------------------------------
+abParser :: Parser (Char, Char)
+abParser = (\a b -> (a, b)) <$> char 'a' <*> char 'b'
+
+abParser_ :: Parser ()
+abParser_ = (\_ _ -> ()) <$> char 'a' <*> char 'b'
+
+intPair :: Parser [Integer]
+intPair = (\x _ y -> [x, y]) <$> posInt <*> char ' ' <*> posInt
+
+------------------------------------------------------------
+--  Exercise #4: Alternative instance for Parser
 ------------------------------------------------------------
 
 instance Alternative Parser where
@@ -105,21 +139,8 @@ instance Alternative Parser where
   Parser p1 <|> Parser p2 = Parser $ \s -> p1 s <|> p2 s
 
 ------------------------------------------------------------
---  Exercise #4: Parsing repetitions
+--  Exercise #5: intOrUppercase
 ------------------------------------------------------------
 
-zeroOrMore :: Parser a -> Parser [a]
-zeroOrMore p = oneOrMore p <|> pure []
-
-oneOrMore :: Parser a -> Parser [a]
-oneOrMore p = (:) <$> p <*> zeroOrMore p
-
-------------------------------------------------------------
---  Exercise #5: Utilities
-------------------------------------------------------------
-
-spaces :: Parser String
-spaces = zeroOrMore (satisfy isSpace)
-
-ident :: Parser String
-ident = (:) <$> satisfy isAlpha <*> zeroOrMore (satisfy isAlphaNum)
+intOrUppercase :: Parser ()
+intOrUppercase = const () <$> posInt <|> const () <$> satisfy isUpper
