@@ -1,17 +1,15 @@
 % -*- LaTeX -*-
-\documentclass{article}
+\documentclass{tufte-handout}
 %include lhs2TeX.fmt
-\usepackage{graphicx}
-\usepackage[stable]{footmisc}
+
 \usepackage{../hshw}
-
-\usepackage{amsmath}
-
-\begin{document}
 
 \title{CIS 194: Homework 11}
 \date{}
 \author{Due Thursday, April 5}
+
+\begin{document}
+
 \maketitle
 
 \begin{itemize}
@@ -21,9 +19,9 @@
 
 \section{Risk}
 
-\begin{center}
+\marginnote{
   \includegraphics[width=2in]{risk.jpg}
-\end{center}
+}
 
 The game of \emph{Risk} involves two or more players, each vying to
 ``conquer the world'' by moving armies around a board representing the
@@ -63,8 +61,8 @@ bit of state (a few numbers), and every time something like
 generate an \verb|Int| and then updates the state according to some
 (deterministic) algorithm. So the numbers which are generated are not
 truly random; they are in fact completely deterministic, but computed
-using an algorithm which is hard to predict.  As long as we
-\emph{initialize} the generator with some truly random data, this is
+using an algorithm which generates random-seeming output.  As long as we
+initialize (\emph{seed}) the generator with some truly random data, this is
 often good enough for purposes such as simulations.
 
 In Haskell we can cerainly have pseudorandom number generator

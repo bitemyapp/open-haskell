@@ -1,12 +1,16 @@
 
+ <!-- CLASS
+
 > import Control.Monad
 > import Control.Applicative
+
+-->
 
 Monads
 ======
 
-CIS 194 Week 11  
-29 March 2012
+CIS 194 Week 12  
+8 April 2013
 
 Suggested reading:
 
@@ -20,12 +24,12 @@ Suggested reading:
 Motivation
 ----------
 
-Last week, we saw how the `Applicative` class allows us to
-idiomatically handle computations which take place in some sort of
-"special context"---for example, taking into account possible failure
-with `Maybe`, multiple possible outputs with `[]`, consulting some
-sort of environment using `((->) e)`, or construct parsers using a
-"combinator" approach, as in the homework.
+Over the last couple of weeks, we have seen how the `Applicative`
+class allows us to idiomatically handle computations which take place
+in some sort of "special context"---for example, taking into account
+possible failure with `Maybe`, multiple possible outputs with `[]`,
+consulting some sort of environment using `((->) e)`, or construct
+parsers using a "combinator" approach, as in the homework.
 
 However, so far we have only seen computations with a fixed structure,
 such as applying a data constructor to a fixed set of arguments.  What
@@ -39,9 +43,9 @@ that we have implemented `Functor` and `Applicative` instances for it:
 > newtype Parser a = Parser { runParser :: String -> Maybe (a, String) }
 
 ~~~~ {.haskell}
-instance Functor Parser where           
+instance Functor Parser where
   ...
-      
+
 instance Applicative Parser where
   ...
 ~~~~
@@ -137,8 +141,9 @@ is just fine).  So to understand it we first need to understand `(>>=)`.
 
 There is actually a fourth method called `fail`, but putting it in the
 `Monad` class was a mistake, and you should never use it, so I won't
-tell you about it (you can read about it in the Typeclassopedia if
-you are interested).
+tell you about it (you can
+[read about it in the Typeclassopedia](http://www.haskell.org/haskellwiki/Typeclassopedia#do_notation)
+if you are interested).
 
 `(>>=)` (pronounced "bind") is where all the action is!  Let's think
 carefully about its type:
@@ -154,13 +159,16 @@ that a mobit of type `m a` represents a computation which results in a
 value (or several values, or no values) of type `a`, and may also have
 some sort of "effect":
 
-  * `c1 :: Maybe a` is a computation which might fail but results in an `a` if 
+  * `c1 :: Maybe a` is a computation which might fail but results in an `a` if
     it succeeds.
 
   * `c2 :: [a]` is a computation which results in (multiple) `a`s.
 
   * `c3 :: Parser a` is a computation which implicitly consumes part
     of a `String` and (possibly) produces an `a`.
+
+  * `c4 :: IO a` is a computation which potentially has some I/O effects and
+    then produces an `a`.
 
 And so on.  Now, what about the second argument to `(>>=)`?  It is a
 *function* of type `(a -> m b)`.  That is, it is a function which will
@@ -197,6 +205,10 @@ instance Monad Maybe where
 `return`, of course, is `Just`.  If the first argument of `(>>=)` is
 `Nothing`, then the whole computation fails; otherwise, if it is `Just
 x`, we apply the second argument to `x` to decide what to do next.
+
+Incidentally, it is common to use the letter `k` for the second
+argument of `(>>=)` because `k` stands for "continuation".  I wish I
+was joking.
 
 Some examples:
 
@@ -245,7 +257,7 @@ sequential parts of the input (and succeed only if they all do).
 ~~~~ {.haskell}
 sequence :: Monad m => [m a] -> m [a]
 sequence [] = return []
-sequence (ma:mas) = 
+sequence (ma:mas) =
   ma >>= \a ->
   sequence mas >>= \as ->
   return (a:as)
