@@ -52,7 +52,7 @@ There are two types of projects you may complete:
 
     + An parser and interpreter for a small programming language, such
       as a
-      [while language](http://www.program-analysis.com/while.html).
+      [while language](http://en.wikipedia.org/wiki/While_loop#While_programming_language).
 
     + A raytracer.
 
