@@ -25,3 +25,5 @@ web/extras/*
 *.inclass.*
 .hsenv
 TAGS
+.cabal-sandbox/
+cabal.sandbox.config

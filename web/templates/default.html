@@ -6,28 +6,52 @@
   <META http-equiv="Content-Type" content="text/html; charset='UTF-8'">
   <title>$title$</title>
 
-  <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-  <link href="/css/style.css" rel="stylesheet" type="text/css" />
+  <link href="/static/semantic.min.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
 
+<div class="ui menu">
+  <a class="item" href="/">
+    <i class="home icon"></i> Home
+  </a>
+
+  <a class="item">
+    <i class="mail icon"></i> Messages
+  </a>
+
+  <div class="right menu">
+    <div class="item">
+      <div class="ui transparent icon input">
+        <input type="text" placeholder="Search...">
+        <i class="search link icon"></i>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="ui segment">
+  <p></p>
+  <p></p>
+</div>
+
   <div id="canvas">
-    <div id="nav">$header$</div>
+    <h1 class="ui header">header</h1>
 
-    <div id="content">
-      
-      $body$
-
+    <div class="ui grid">
+      <div class="eight wide column" id="content">
+        $body$
+      </div>
     </div>
 
     <div id="footer"><center>
       <font size="-2">Powered
       by <a href="http://community.haskell.org/~ndm/shake/">shake</a>,
       <a href="http://jaspervdj.be/hakyll/index.html">hakyll</a>,
+      <a href="http://semantic-ui.com/">semantic-ui</a>,
       and <a href="http://johnmacfarlane.net/pandoc/">pandoc</a>.
       </center>
     </div>
   </div>
+
 </body>
 
 </html>
