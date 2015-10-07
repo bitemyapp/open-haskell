@@ -1,1 +1,0 @@
-while true; do make explec; sleep 5; done
