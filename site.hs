@@ -21,19 +21,19 @@ main = hakyll $ do
             >>= loadAndApplyTemplate "templates/default.html" defaultContext
             >>= relativizeUrls
 
-    match "posts/*" $ do
+    match "weeks/*" $ do
         route $ setExtension "html"
         compile $ pandocCompiler
-            >>= loadAndApplyTemplate "templates/post.html"    postCtx
-            >>= loadAndApplyTemplate "templates/default.html" postCtx
+            >>= loadAndApplyTemplate "templates/week.html"    weekCtx
+            >>= loadAndApplyTemplate "templates/default.html" weekCtx
             >>= relativizeUrls
 
     create ["archive.html"] $ do
         route idRoute
         compile $ do
-            posts <- recentFirst =<< loadAll "posts/*"
+            posts <- recentFirst =<< loadAll "weeks/*"
             let archiveCtx =
-                    listField "posts" postCtx (return posts) `mappend`
+                    listField "weeks" weekCtx (return posts) `mappend`
                     constField "title" "Archives"            `mappend`
                     defaultContext
 
@@ -46,9 +46,9 @@ main = hakyll $ do
     match "index.html" $ do
         route idRoute
         compile $ do
-            posts <- recentFirst =<< loadAll "posts/*"
+            posts <- recentFirst =<< loadAll "weeks/*"
             let indexCtx =
-                    listField "posts" postCtx (return posts) `mappend`
+                    listField "weeks" weekCtx (return posts) `mappend`
                     constField "title" "Home"                `mappend`
                     defaultContext
 
@@ -61,7 +61,6 @@ main = hakyll $ do
 
 
 --------------------------------------------------------------------------------
-postCtx :: Context String
-postCtx =
-    dateField "date" "%B %e, %Y" `mappend`
+weekCtx :: Context String
+weekCtx =
     defaultContext
