@@ -10,6 +10,10 @@ import           Hakyll
 import           Hakyll.Web.Pandoc
 import           Text.Pandoc.Options
 
+config :: Configuration
+config = defaultConfiguration
+        { deployCommand = "chmod 644 images/* && rsync -avz -e ssh ./_site/ openhaskell.com:/var/www/openhaskell.com/"}
+
 getWeek :: MonadMetadata m => Identifier -> m Int
 getWeek id' = do
   metadata <- getMetadata id'
@@ -44,7 +48,7 @@ weekly =
 --     updated = defaultHakyllReaderOptions { readerExtensions = added }
 
 main :: IO ()
-main = hakyll $ do
+main = hakyllWith config $ do
     match "images/*" $ do
         route   idRoute
         compile copyFileCompiler
