@@ -5,12 +5,6 @@ week: 0
 published: 2015-01-01
 ---
 
-Haskell Basics
-==============
-
-CIS 194 Week 1\
-14 January 2013
-
 What is Haskell?
 ----------------
 

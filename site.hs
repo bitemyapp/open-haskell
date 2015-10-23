@@ -49,6 +49,10 @@ main = hakyll $ do
         route   idRoute
         compile copyFileCompiler
 
+    match "js/*" $ do
+        route   idRoute
+        compile copyFileCompiler
+
     match "css/*" $ do
         route   idRoute
         compile compressCssCompiler
@@ -59,7 +63,7 @@ main = hakyll $ do
             >>= loadAndApplyTemplate "templates/default.html" defaultContext
             >>= relativizeUrls
 
-    match "weeks/*" $ do
+    match "lectures/*" $ do
         route $ setExtension "html"
         compile $ pandocCompiler
             >>= loadAndApplyTemplate "templates/post.html"    postCtx
@@ -69,9 +73,9 @@ main = hakyll $ do
     create ["archive.html"] $ do
         route idRoute
         compile $ do
-            posts <- weekly =<< loadAll "weeks/*"
+            posts <- weekly =<< loadAll "lectures/*"
             let archiveCtx =
-                    listField "weeks" postCtx (return posts) `mappend`
+                    listField "lectures" postCtx (return posts) `mappend`
                     constField "title" "Archives"            `mappend`
                     defaultContext
 
@@ -84,9 +88,9 @@ main = hakyll $ do
     match "index.html" $ do
         route idRoute
         compile $ do
-            weeks <- weekly =<< loadAll "weeks/*"
+            weeks <- weekly =<< loadAll "lectures/*"
             let indexCtx =
-                    listField "weeks" postCtx (return weeks) `mappend`
+                    listField "lectures" postCtx (return weeks) `mappend`
                     constField "title" "Home"                `mappend`
                     defaultContext
 
