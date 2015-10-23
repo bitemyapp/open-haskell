@@ -60,7 +60,7 @@ By contrast, suppose you have
 What do you have? A cake? No, you have some *instructions* for how to
 make a cake, just a sheet of paper with some writing on it.
 
-<img src="/images/recipe.gif" width="200" />
+<img src="/images/recipe.png" width="200" />
 
 Not only do you not actually have a cake, merely being in possession of
 the recipe has no effect on anything else whatsoever. Simply holding the
