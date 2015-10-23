@@ -12,7 +12,7 @@ import           Text.Pandoc.Options
 
 config :: Configuration
 config = defaultConfiguration
-        { deployCommand = "chmod 644 images/* && rsync -avz -e ssh ./_site/ openhaskell.com:/var/www/openhaskell.com/"}
+        { deployCommand = "rsync -avz -e ssh ./_site/ openhaskell.com:/var/www/openhaskell.com/ && chmod 644 images/*"}
 
 getWeek :: MonadMetadata m => Identifier -> m Int
 getWeek id' = do
