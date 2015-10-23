@@ -258,12 +258,3 @@ get some additional benefits.
     This matches only on the `field1` field from the `D` value, calling
     it `x` (of course, in place of `x` we could also put an arbitrary
     pattern), ignoring the other fields.
-
-<!--
-
-Local Variables:
-mode:markdown
-compile-command:"mk build"
-End:
-
--->
